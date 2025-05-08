@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { connectDb } from '../lib/db.mjs';
-import User          from '../models/user.mjs';
+import User          from '../models/User.mjs';
 
 export default async function Home() {
   await connectDb();

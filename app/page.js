@@ -1,3 +1,5 @@
+//ap/page.js
+
 import Image from 'next/image';
 import { connectDb } from '../lib/db.mjs';
 import User          from '../models/User.mjs';

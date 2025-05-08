@@ -1,7 +1,7 @@
 // app/api/users/route.mjs
 import { NextResponse } from 'next/server';
 import { connectDb }    from '../../../lib/db.mjs';
-import User             from '../../../models/user.mjs';
+import User             from '../../../models/User.mjs';
 
 // GET /api/users
 export async function GET() {

@@ -1,45 +1,51 @@
 // app/auth/signin/page.jsx
 'use client'
+export const dynamic = 'force-dynamic'
 
 import { useEffect, useState } from 'react'
 import { signIn, useSession }  from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function SignInPage() {
-  const { data: session } = useSession()
-  const router            = useRouter()
-  const params            = useSearchParams()
-  const errorFromUrl      = params.get('error')
+  const { data: session, status } = useSession()
+  const router                   = useRouter()
+  const params                   = useSearchParams()
+  const errorFromUrl             = params.get('error')
 
-  const [email, setEmail]       = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail]         = useState('')
+  const [password, setPassword]   = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  // If already signed in, redirect to /admin
+  // Redirect away if already authenticated
   useEffect(() => {
-    if (session) router.replace('/admin')
-  }, [session, router])
+    if (status === 'authenticated') {
+      router.replace('/admin')
+    }
+  }, [status, router])
 
-  // Show error message if NextAuth redirected back with error
+  // Show an error if NextAuth appended ?error= to the URL
   useEffect(() => {
-    if (errorFromUrl) setErrorMessage('Email ou mot de passe invalide')
+    if (errorFromUrl) {
+      setErrorMessage('Email ou mot de passe invalide')
+    }
   }, [errorFromUrl])
 
   const handleSubmit = async e => {
     e.preventDefault()
     setErrorMessage('')
 
-    // Let NextAuth handle the redirect on success or failure
     await signIn('credentials', {
       redirect: true,
       callbackUrl: '/admin',
       email,
-      password
+      password,
     })
   }
 
-  // Don't render the form while session is loading or redirecting
-  if (session) return null
+  // While loading or redirecting away, render nothing
+  if (status === 'loading' || status === 'authenticated') {
+    return null
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50">

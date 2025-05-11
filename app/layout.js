@@ -1,16 +1,21 @@
-// app/layout.js
-import './globals.css';     
+import Providers from './providers';
+import Header    from './components/Header';
+import './globals.css';
 
 export const metadata = {
-  title: 'My Blog',
-  description: 'Next.js + Tailwind + MongoDB demo',
+  title: 'Pause Réflexo',
+  description: '...'
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="bg-gray-50 text-gray-900">
-        {children}
+    <html lang="fr">
+      <body>
+        {/* on wrappe l’app dans SessionProvider */}
+        <Providers>
+          <Header />
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );

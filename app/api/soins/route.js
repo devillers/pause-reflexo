@@ -1,9 +1,9 @@
 // app/api/soins/route.js
-import { connectDb } from '../../../lib/db.mjs';
-import Soin          from '../../../models/Soin.mjs';
-import slugify      from 'slugify';
+import { connectDb }        from '../../../lib/db.mjs';
+import Soin                 from '../../../models/Soin.mjs';
+import slugify              from 'slugify';
 import { v2 as cloudinary } from 'cloudinary';
-import streamifier   from 'streamifier';
+import streamifier          from 'streamifier';
 
 cloudinary.config({
   cloud_name:   process.env.CLOUDINARY_CLOUD_NAME,
@@ -12,6 +12,25 @@ cloudinary.config({
 });
 
 export const runtime = 'nodejs';
+
+export async function GET() {
+  try {
+    await connectDb();
+    const soins = await Soin.find()
+      .sort({ createdAt: -1 })
+      .lean();
+    return new Response(JSON.stringify(soins), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (err) {
+    console.error('❌ Error GET /api/soins:', err);
+    return new Response(
+      JSON.stringify({ message: 'Erreur serveur' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+}
 
 export async function POST(req) {
   try {
@@ -24,7 +43,7 @@ export async function POST(req) {
     const duree       = form.get('duree');
     const file        = form.get('file');
 
-    if (!title || !description || !rawSlug || !file || !prix || !duree) {
+    if (!title || !description || !rawSlug || !prix || !duree || !file) {
       return new Response(
         JSON.stringify({ message: 'Champs manquants' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -33,14 +52,14 @@ export async function POST(req) {
 
     const slug = slugify(rawSlug, { lower: true, strict: true });
 
-    // upload image...
-    const buf = Buffer.from(await new Response(file).arrayBuffer());
+    // upload image to Cloudinary
+    const buffer = Buffer.from(await new Response(file).arrayBuffer());
     const uploaded = await new Promise((res, rej) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder: 'soin', resource_type: 'auto' },
-        (err, result) => err ? rej(err) : res(result)
+        { folder: 'soins', resource_type: 'auto' },
+        (err, result) => (err ? rej(err) : res(result))
       );
-      streamifier.createReadStream(buf).pipe(stream);
+      streamifier.createReadStream(buffer).pipe(stream);
     });
 
     await connectDb();
@@ -59,16 +78,8 @@ export async function POST(req) {
       JSON.stringify({ message: 'Soin créé', soin }),
       { status: 201, headers: { 'Content-Type': 'application/json' } }
     );
-
   } catch (err) {
-    console.error(err);
-    // Duplicate slug
-    if (err.code === 11000 && err.keyPattern && err.keyPattern.slug) {
-      return new Response(
-        JSON.stringify({ message: 'Ce slug est déjà utilisé. Choisissez-en un autre.' }),
-        { status: 409, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
+    console.error('❌ Error POST /api/soins:', err);
     return new Response(
       JSON.stringify({ message: 'Erreur serveur', error: err.message }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }

@@ -1,25 +1,19 @@
 // app/blog/page.js
-import Link         from 'next/link';
-import Image        from 'next/image';
-import { connectDb } from '../../lib/db.mjs';
-import Post          from '../../models/Post.mjs';
+import Link         from 'next/link'
+import Image        from 'next/image'
+import { connectDb } from '../../lib/db.mjs'
+import Post          from '../../models/Post.mjs'
 
 export default async function BlogPage() {
-  // 1) connect to Mongo
-  await connectDb();
+  await connectDb()
+  const posts = await Post.find().sort({ category: 1, createdAt: -1 }).lean()
 
-  // 2) fetch posts, sorted by category then date
-  const posts = await Post.find()
-    .sort({ category: 1, createdAt: -1 })
-    .lean();
-
-  // 3) group posts by category
   const byCategory = posts.reduce((acc, post) => {
-    const cat = post.category || 'Non classé';
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(post);
-    return acc;
-  }, {});
+    const cat = post.category || 'Non classé'
+    if (!acc[cat]) acc[cat] = []
+    acc[cat].push(post)
+    return acc
+  }, {})
 
   return (
     <main className="p-8">
@@ -33,7 +27,7 @@ export default async function BlogPage() {
                 key={post._id}
                 className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <Link href={`/blog/${post.slug}`}>                  
+                <Link href={`/blog/${post.slug}`}>
                   {post.image && (
                     <Image
                       src={post.image}
@@ -44,7 +38,6 @@ export default async function BlogPage() {
                       priority={i === 0}
                     />
                   )}
-
                   <div className="p-4">
                     <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
                     <p className="text-gray-600 text-sm line-clamp-3">
@@ -58,5 +51,5 @@ export default async function BlogPage() {
         </section>
       ))}
     </main>
-  );
+  )
 }

@@ -1,29 +1,31 @@
 // app/soin/[slug]/page.js
-import { connectDb }    from '../../../lib/db.mjs';
-import Soin             from '../../../models/Soin.mjs';
-import Link             from 'next/link';
-import { notFound }     from 'next/navigation';
-import SoinPageClient   from './page.client';
+import { notFound }    from 'next/navigation'
+import { connectDb }   from '../../../lib/db.mjs'
+import Soin            from '../../../models/Soin.mjs'
+import SoinPageActions from './actions.client.js'
 
-export const runtime = 'nodejs';
+export const runtime = 'nodejs'
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  await connectDb();
-  const soin = await Soin.findOne({ slug });
-  return { title: soin?.title || 'Non trouvé' };
+  // Next.js 15 : params est un Promise
+  const { slug } = await params
+  await connectDb()
+  const soin = await Soin.findOne({ slug })
+  return { title: soin?.title || 'Soin non trouvé' }
 }
 
 export default async function SoinPage({ params }) {
-  const { slug } = await params;
-  await connectDb();
-  const soin = await Soin.findOne({ slug });
-  if (!soin) return notFound();
+  // Next.js 15 : attendre params avant destructuration
+  const { slug } = await params
 
-  const data = JSON.parse(JSON.stringify(soin));
+  await connectDb()
+  const soin = await Soin.findOne({ slug })
+  if (!soin) return notFound()
+
   return (
-    <div className="max-w-2xl mx-auto p-8 space-y-6">
+    <article className="p-8 max-w-2xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold">{soin.title}</h1>
+
       {soin.image && (
         <img
           src={soin.image}
@@ -31,12 +33,11 @@ export default async function SoinPage({ params }) {
           className="w-full h-auto rounded-lg"
         />
       )}
-      {soin.category && (
-        <p>
-          <strong>Catégorie :</strong> {soin.category}
-        </p>
-      )}
-      {/* Nouveaux champs */}
+
+      <div className="prose">
+        <p>{soin.description}</p>
+      </div>
+
       {soin.prix && (
         <p>
           <strong>Prix :</strong> {soin.prix}
@@ -47,19 +48,12 @@ export default async function SoinPage({ params }) {
           <strong>Durée :</strong> {soin.duree}
         </p>
       )}
-      <div className="prose">
-        <p>{soin.description}</p>
-      </div>
 
-      <div className="flex space-x-4">
-        <Link
-          href={`/soin/${soin.slug}/edit`}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Modifier ce soin
-        </Link>
-        <SoinPageClient soin={data} />
-      </div>
-    </div>
-  );
+      {/*
+        Ces actions (Modifier/Supprimer) ne s'affichent que si
+        l'admin est connecté, et redirigent vers /admin/soins/…
+      */}
+      <SoinPageActions slug={slug} />
+    </article>
+  )
 }

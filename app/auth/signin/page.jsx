@@ -1,6 +1,7 @@
 // app/auth/signin/page.jsx
 'use client'
 export const dynamic = 'force-dynamic'
+export const prerender = false
 
 import { useEffect, useState } from 'react'
 import { signIn, useSession }  from 'next-auth/react'
@@ -16,14 +17,12 @@ export default function SignInPage() {
   const [password, setPassword]   = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  // Redirect away if already authenticated
   useEffect(() => {
     if (status === 'authenticated') {
       router.replace('/admin')
     }
   }, [status, router])
 
-  // Show an error if NextAuth appended ?error= to the URL
   useEffect(() => {
     if (errorFromUrl) {
       setErrorMessage('Email ou mot de passe invalide')
@@ -42,7 +41,6 @@ export default function SignInPage() {
     })
   }
 
-  // While loading or redirecting away, render nothing
   if (status === 'loading' || status === 'authenticated') {
     return null
   }

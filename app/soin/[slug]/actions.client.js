@@ -8,7 +8,8 @@ export default function SoinPageActions({ slug }) {
   const { data: session, status } = useSession()
   const router = useRouter()
 
-  if (status === 'loading' || !session?.user?.role || session.user.role !== 'admin') {
+  // only show for logged in admin
+  if (status !== 'authenticated' || session.user.role !== 'admin') {
     return null
   }
 
@@ -18,8 +19,8 @@ export default function SoinPageActions({ slug }) {
       method: 'DELETE',
     })
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ message: 'Erreur' }))
-      alert(err.message)
+      const { message } = await res.json().catch(() => ({ message: 'Erreur' }))
+      alert(message)
       return
     }
     alert('Soin supprimé')
@@ -27,9 +28,9 @@ export default function SoinPageActions({ slug }) {
   }
 
   return (
-    <div className="flex gap-4 mt-4">
+    <div className="flex space-x-4 mt-6">
       <button
-        onClick={() => router.push(`/admin/soins/${encodeURIComponent(slug)}/edit`)}
+        onClick={() => router.push(`/admin/soins/${slug}/edit`)}
         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
         Modifier ce soin

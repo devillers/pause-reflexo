@@ -25,7 +25,7 @@ export default async function SoinPage() {
 
   return (
     <main className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Soins par catégorie</h1>
+      <h1 className="text-3xl font-bold mb-6">Soins par catégorie hole</h1>
 
       {Object.entries(byCategory).map(([category, catSoins]) => (
         <section key={category} className="mb-12">

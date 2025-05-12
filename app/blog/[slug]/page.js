@@ -1,6 +1,6 @@
 // app/blog/[slug]/page.js
 import { notFound } from "next/navigation";
-import Link from "next/link";
+
 import { connectDb } from "../../../lib/db.mjs";
 import Post from "../../../models/Post.mjs";
 import PostPageActions from "./actions.client";

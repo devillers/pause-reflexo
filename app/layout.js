@@ -4,6 +4,7 @@ import { LayoutProvider } from './LayoutContext'
 import LayoutWrapper from './LayoutWrapper'
 import Providers from './providers'
 
+
 export const metadata = {
   title: 'Pause Réflexo',
   description: '...'

@@ -1,4 +1,4 @@
-import Bto from "./BtoRdv";
+//import Bto from "./BtoRdv";
 
 export default function HeroHeader() {
   return (
@@ -20,7 +20,7 @@ export default function HeroHeader() {
           <br />
           <span className="text-5xl md:text-6xl text-white">Mont-Blanc</span>
         </h1>
-        <Bto />
+        {/* <Bto /> */}
       </div>
     </section>
   );

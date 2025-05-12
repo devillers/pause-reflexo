@@ -9,6 +9,7 @@ import Head from 'next/head'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import { useLayout } from './LayoutContext'
+import FloatingContact from './components/FloatingContact';
 
 
 export default function LayoutWrapper({ children }) {
@@ -41,6 +42,7 @@ export default function LayoutWrapper({ children }) {
       <main>{children}</main>
 
       {!hideLayout && <Footer />}
+      {!hideLayout && <FloatingContact />}
 
       {/* Cookie Consent */}
       <CookieConsent

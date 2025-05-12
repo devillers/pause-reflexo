@@ -92,7 +92,7 @@ export default function LayoutWrapper({ children }) {
       >
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <img
-            src="/cookie.png"
+            src="/images/cookie.png"
             alt="Cookie"
             className="w-24 h-24 object-contain flex-shrink-0"
           />

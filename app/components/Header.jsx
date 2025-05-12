@@ -1,33 +1,37 @@
+// app/components/Header.jsx
 'use client';
-import { useSession, signIn, signOut } from 'next-auth/react';
-import Link from 'next/link';
+
+import { useSession } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import MegaMenu from './Mega_menu';
+import AdminHeader from './AdminHeader';
 
 export default function Header() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Dès que la session est connue, si on est dans /admin sans session, on redirige
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (!session && pathname.startsWith('/admin')) {
+      router.replace('/auth/signin');
+    }
+  }, [status, session, pathname, router]);
+
+  // Pendant le chargement, on n'affiche rien
   if (status === 'loading') return null;
 
+  // Si on est dans /admin ET connecté -> menu admin
+  if (session && pathname.startsWith('/admin')) {
+    return <AdminHeader />;
+  }
+
+  // Pour toutes les autres routes -> MegaMenu
   return (
-    <header className="p-4 flex justify-between items-center bg-gray-100">
-      <Link href="/"><h1 className="text-xl font-bold">Pause Réflexo</h1></Link>
-      {session ? (
-        <div className="flex items-center space-x-4">
-          <span className="text-sm">Salut, {session.user.email}</span>
-          <button
-            onClick={() => signOut()}
-            className="px-3 py-1 bg-red-600 text-white rounded"
-          >
-            Déconnexion
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={() => signIn()}
-          className="px-3 py-1 bg-blue-600 text-white rounded"
-        >
-          Connexion
-        </button>
-      )}
+    <header>
+      <MegaMenu />
     </header>
   );
 }
-

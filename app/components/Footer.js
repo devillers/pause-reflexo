@@ -77,6 +77,14 @@ const Footer = () => {
                 Politique de Confidentialité
               </Link>
             </li>
+             <li className="font-semibold hover:text-[#009992] cursor-pointer">
+              <Link
+                href="/admin"
+                className="hover:text-[#009992] transition-colors duration-200"
+              >
+               Admin
+              </Link>
+            </li>
           </ul>
         </div>
 

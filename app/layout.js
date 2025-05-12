@@ -1,22 +1,26 @@
-import Providers from './providers';
-import Header    from './components/Header';
-import './globals.css';
+// app/layout.js (Server Component)
+import './globals.css'
+import { LayoutProvider } from './LayoutContext'
+import LayoutWrapper from './LayoutWrapper'
+import Providers from './providers'
 
 export const metadata = {
   title: 'Pause Réflexo',
   description: '...'
-};
+}
 
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">
-      <body>
-        {/* on wrappe l’app dans SessionProvider */}
+      <body className="relative">
         <Providers>
-          <Header />
-          <main>{children}</main>
+          <LayoutProvider>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
+          </LayoutProvider>
         </Providers>
       </body>
     </html>
-  );
+  )
 }

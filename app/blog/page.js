@@ -13,7 +13,7 @@ export default async function BlogPage() {
     if (!acc[cat]) acc[cat] = []
     acc[cat].push(post)
     return acc
-  }, {})
+  }, {})  
 
   return (
     <main className="p-8">

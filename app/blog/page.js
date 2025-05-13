@@ -67,14 +67,7 @@ export default async function BlogPage() {
                       </span>
                     </div>
 
-                    {/* <div className="p-4">
-                      <h3 className="text-xl font-semibold mb-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm line-clamp-3">
-                        {post.description}
-                      </p>
-                    </div> */}
+                   
                   </div>
                 </Link>
               </li>

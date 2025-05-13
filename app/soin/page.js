@@ -66,16 +66,16 @@ export default async function SoinPage() {
 
                     {/* Content */}
                     <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-2">
-                      <h3 className="text-white text-2xl font-bold mb-2 drop-shadow">
+                      <h3 className="text-x text-sm uppercase font-bold mb-2 drop-shadow">
                         {soin.title}
                       </h3>
                       {soin.prix && (
-                        <p className="text-white text-md font-bold mb-2">
+                        <p className="text-white text-[12px] font-bold ">
                           Prix : {soin.prix} €
                         </p>
                       )}
                       {soin.duree && (
-                        <p className="text-white text-md font-bold mb-4">
+                        <p className="text-white text-[12px] font-bold mb-4">
                           Durée : {soin.duree} mn
                         </p>
                       )}

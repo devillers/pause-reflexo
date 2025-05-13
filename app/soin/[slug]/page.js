@@ -31,7 +31,7 @@ export default async function SoinPage({ params }) {
             backgroundImage: `url(${soin.image || "/images/blog.webp"})`,
           }}
         >
-          <h1 className="text-4xl font-bold">{soin.title}</h1>
+          <h1 className="text-4xl text-[#009992]font-bold">{soin.title}</h1>
         </div>
       </section>
       <article className="p-8 max-w-3xl mx-auto space-y-6">

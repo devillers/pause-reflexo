@@ -1,43 +1,43 @@
 //app/admin/posts/page.js
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function AdminPostPage() {
   const router = useRouter();
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('/api/posts')
-      .then(r => r.ok ? r.json() : Promise.reject())
+    fetch("/api/posts")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setPosts)
-      .catch(() => alert('Impossible de charger les posts'));
+      .catch(() => alert("Impossible de charger les posts"));
   }, []);
 
   return (
-    <main className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Tous les posts</h1>
+    <main className="p-2 sm:p-4">
+      <div className="flex-cols items-center mb-6">
+        <h1 className="text-2xl font-light">Tous les posts</h1>
         <button
-          onClick={() => router.push('/admin/posts/new')}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          onClick={() => router.push("/admin/posts/new")}
+          className="mt-6 border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
         >
-          ➕ Créer un post
+          Créer un post
         </button>
       </div>
 
-      <ul className="space-y-4">
-        {posts.map(post => (
+      <ul className="space-y-4 ">
+        {posts.map((post) => (
           <li
             key={post._id}
-            className="border rounded p-4 flex items-center justify-between"
+            className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm rounded-lg bg-white"
           >
             {/* Left: thumbnail + info */}
-            <div className="flex items-center space-x-4">
-              <div className="w-24 h-16 relative flex-shrink-0">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 flex-1">
+              <div className="w-full sm:w-24 sm:h-24 h-40 relative flex-shrink-0">
                 {post.image ? (
                   <Image
                     src={post.image}
@@ -52,28 +52,28 @@ export default function AdminPostPage() {
                 )}
               </div>
               <div>
-                <h2 className="font-semibold">{post.title}</h2>
-                <p className="text-sm text-gray-600">
-                  Catégorie : {post.category || '—'}
+                <h2 className="font-light text-sm uppercase">{post.title}</h2>
+                <p className="text-xs font-thin text-gray-700">
+                  Catégorie : {post.category || "—"}
                 </p>
               </div>
             </div>
 
             {/* Right: actions */}
-            <div className="flex gap-4">
+            <div className="flex gap-2 sm:gap-4 self-start sm:self-auto">
               <button
                 onClick={() => router.push(`/admin/posts/${post.slug}/edit`)}
-                className="text-blue-600 hover:underline"
+                className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#027771] hover:text-white transition"
               >
                 Modifier
               </button>
               <button
                 onClick={async () => {
-                  if (!confirm('Supprimer ce post ?')) return;
-                  await fetch(`/api/posts/${post.slug}`, { method: 'DELETE' });
-                  setPosts(prev => prev.filter(p => p.slug !== post.slug));
+                  if (!confirm("Supprimer ce post ?")) return;
+                  await fetch(`/api/posts/${post.slug}`, { method: "DELETE" });
+                  setPosts((prev) => prev.filter((p) => p.slug !== post.slug));
                 }}
-                className="text-red-600 hover:underline"
+                className="border border-[#990021] text-[#990021] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#990021] hover:text-white transition"
               >
                 Supprimer
               </button>

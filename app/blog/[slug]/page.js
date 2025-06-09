@@ -25,24 +25,36 @@ export default async function PostPage({ params }) {
 
   return (
     <>
-      <section className="relative">
-        <div
-          className="relative z-10 mx-auto justify-center flex flex-col min-h-[540px] p-6 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${post.image || "/images/blog.webp"})`,
-          }}
-        >
-          <h1 className="text-4xl font-bold">{post.title}</h1>
+      <section
+        className="relative h-[540px] bg-cover bg-center"
+        style={{ backgroundImage: `url(${post.image || "/images/blog.webp"})` }}
+      >
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-bl from-transparent to-black/70 z-10" />
+
+        {/* Text content */}
+        <div className="relative z-20 max-w-[660px]  h-full flex items-center p-6">
+          <h1 className="text-4xl md:text-6xl text-white font-bold uppercase">
+            {post.title}
+          </h1>
         </div>
       </section>
-      <article className="p-8 max-w-3xl mx-auto space-y-6">
-        <div className="prose prose-lg">
-          <p>{post.description}</p>
-        </div>
 
-        {/* Ces boutons n’apparaissent que pour un admin connecté */}
-        <PostPageActions slug={slug} />
-      </article>
+    <article className="p-8 max-w-3xl mx-auto space-y-6">
+<div
+  className="prose prose-lg text-justify max-w-none"
+  dangerouslySetInnerHTML={{
+    __html: post.description
+      .replace(/\n/g, '<br />')
+      .replace(/- (.+)/g, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>)+/g, match => `<ul>${match}</ul>`)
+  }}
+/>
+
+  {/* Ces boutons n’apparaissent que pour un admin connecté */}
+  <PostPageActions slug={slug} />
+</article>
+
     </>
   );
 }

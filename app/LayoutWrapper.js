@@ -1,19 +1,20 @@
-// app/LayoutWrapper.js (Client Component)
 'use client'
 
 import React from 'react'
 import Script from 'next/script'
 import CookieConsent from 'react-cookie-consent'
 import Head from 'next/head'
+import { usePathname } from 'next/navigation'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
 import { useLayout } from './LayoutContext'
 import FloatingContact from './components/FloatingContact';
 
-
 export default function LayoutWrapper({ children }) {
   const { hideLayout } = useLayout()
+  const pathname = usePathname()
+  const isAdmin = pathname.startsWith('/admin')
 
   return (
     <>
@@ -22,7 +23,6 @@ export default function LayoutWrapper({ children }) {
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
       </Head>
 
-      {/* Google Analytics */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-FER4ECWWK3"
         strategy="afterInteractive"
@@ -42,7 +42,7 @@ export default function LayoutWrapper({ children }) {
       <main>{children}</main>
 
       {!hideLayout && <Footer />}
-      {!hideLayout && <FloatingContact />}
+      {!hideLayout && !isAdmin && <FloatingContact />}
 
       {/* Cookie Consent */}
       <CookieConsent

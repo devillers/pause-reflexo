@@ -16,7 +16,7 @@ export default function Header() {
           <span className="text-sm">Salut, {session.user.email}</span>
           <button
             onClick={() => signOut()}
-            className="px-3 py-1 bg-red-600 text-white rounded"
+            className="border border-red-500 text-red-500 px-4 py-2 rounded-full text-xs uppercase hover:bg-red-500 hover:text-white transition"
           >
             Déconnexion
           </button>
@@ -25,7 +25,7 @@ export default function Header() {
         
         <button
           onClick={() => signIn()}
-          className="px-3 py-1 bg-blue-600 text-white rounded"
+          className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
         >
           Connexion
         </button>

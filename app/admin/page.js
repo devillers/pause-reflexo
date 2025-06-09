@@ -55,20 +55,20 @@ export default function AdminPage() {
           <h2 className="text-xl font-semibold">Posts</h2>
           <button
             onClick={() => router.push('/admin/posts/new')}
-            className="px-4 py-2 bg-green-600 text-white rounded"
+            className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
           >
             Nouveau post
           </button>
         </div>
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {posts.map(post => (
-            <li key={post._id} className="border rounded p-4">
-              <h3 className="font-semibold mb-2">{post.title}</h3>
-              <p className="text-sm text-gray-600 mb-2">{post.category}</p>
-              <div className="flex gap-2">
+            <li key={post._id}  className=" p-4 shadow-sm rounded-lg bg-white">
+              <h3 className="font-semibold text-sm mb-2">{post.title}</h3>
+              <p className="text-xs text-gray-600 mb-2">{post.category}</p>
+              <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => router.push(`/admin/posts/${post.slug}/edit`)}
-                  className="text-blue-600"
+                   className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#027771] hover:text-white transition"
                 >
                   Modifier
                 </button>
@@ -77,7 +77,7 @@ export default function AdminPage() {
                     await fetch(`/api/posts/${encodeURIComponent(post.slug)}`, { method: 'DELETE' })
                     setPosts(prev => prev.filter(p => p.slug !== post.slug))
                   }}
-                  className="text-red-600"
+                   className="border border-red-500 text-red-500 px-4 py-2 rounded-full text-[10px] uppercase hover:bg-red-500 hover:text-white transition"
                 >
                   Supprimer
                 </button>
@@ -92,20 +92,20 @@ export default function AdminPage() {
           <h2 className="text-xl font-semibold">Soins</h2>
           <button
             onClick={() => router.push('/admin/soins/new')}
-            className="px-4 py-2 bg-green-600 text-white rounded"
+            className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#027771] hover:text-white transition"
           >
             Nouveau soin
           </button>
         </div>
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {soins.map(soin => (
-            <li key={soin._id} className="border rounded p-4">
-              <h3 className="font-semibold mb-2">{soin.title}</h3>
-              <p className="text-sm text-gray-600 mb-2">{soin.category}</p>
-              <div className="flex gap-2">
+            <li key={soin._id} className=" p-4 shadow-sm rounded-lg bg-white">
+              <h3 className="font-semibold text-sm mb-2">{soin.title}</h3>
+              <p className=" text-gray-600 text-xs mb-2">{soin.category}</p>
+              <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => router.push(`/admin/soins/${soin.slug}/edit`)}
-                  className="text-blue-600"
+                  className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#027771] hover:text-white transition"
                 >
                   Modifier
                 </button>
@@ -114,7 +114,7 @@ export default function AdminPage() {
                     await fetch(`/api/soins/${encodeURIComponent(soin.slug)}`, { method: 'DELETE' })
                     setSoins(prev => prev.filter(s => s.slug !== soin.slug))
                   }}
-                  className="text-red-600"
+                   className="border border-red-500 text-red-500 px-4 py-2 rounded-full text-[10px] uppercase hover:bg-red-500 hover:text-white transition"
                 >
                   Supprimer
                 </button>

@@ -1,4 +1,4 @@
-//app/api/uploadCoudinary/route.mjs
+// app/api/uploadCoudinary/route.mjs
 
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -8,8 +8,8 @@ cloudinary.config({
   api_secret:    process.env.CLOUDINARY_API_SECRET,
 });
 
-export const runtime     = 'nodejs'; // enable streaming
-export const maxDuration = 60;       // 60s timeout
+export const runtime     = 'nodejs';
+export const maxDuration = 60;
 
 export async function POST(req) {
   const formData = await req.formData();

@@ -30,13 +30,13 @@ export default function PostPageActions({ slug }) {
     <div className="flex space-x-4 mt-6">
       <button
         onClick={() => router.push(`/admin/posts/${slug}/edit`)}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+         className="cursor-pointer  inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset"
       >
         Modifier ce post
       </button>
       <button
         onClick={handleDelete}
-        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+         className="cursor-pointer  inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-700/10 ring-inset"
       >
         Supprimer ce post
       </button>

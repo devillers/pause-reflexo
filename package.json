@@ -18,7 +18,7 @@
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.1",
     "dotenv": "^16.5.0",
-    "framer-motion": "^12.10.5",
+    "framer-motion": "^12.16.0",
     "lucide-react": "^0.509.0",
     "mongodb": "^6.16.0",
     "mongoose": "^8.14.1",

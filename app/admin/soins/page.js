@@ -16,12 +16,12 @@ export default function AdminSoinsPage() {
   }, []);
 
   return (
-   <main className="p-2 sm:p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Tous les soins</h1>
+ <main className="p-2 sm:p-4 max-w-5xl mx-auto">
+      <div className="flex-cols  items-center ">
+        <h1 className="text-2xl font-bold mb-6">Tous les soins</h1>
          <button
           onClick={() => router.push("/admin/posts/new")}
-          className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
+          className=" mb-6 border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#027771] hover:text-white transition"
         >
           Créer un soin 
         </button>
@@ -77,7 +77,7 @@ export default function AdminSoinsPage() {
                   await fetch(`/api/soins/${soin.slug}`, { method: "DELETE" });
                   setSoins(soins.filter((s) => s.slug !== soin.slug));
                 }}
-                className="border border-[#990021] text-[#990021] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#990021] hover:text-white transition"
+                className="border border-red-500 text-red-500 px-4 py-2 rounded-full text-[10px] uppercase hover:bg-red-500 hover:text-white transition"
               >
                 Supprimer
               </button>

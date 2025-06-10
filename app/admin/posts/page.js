@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+
 import Image from "next/image";
 
 export default function AdminPostPage() {
@@ -18,14 +18,14 @@ export default function AdminPostPage() {
   }, []);
 
   return (
-    <main className="p-2 sm:p-4">
-      <div className="flex-cols items-center mb-6">
-        <h1 className="text-2xl font-light">Tous les posts</h1>
+    <main className="p-2 sm:p-4 max-w-5xl mx-auto">
+      <div className="flex-cols items-center ">
+        <h1 className="text-2xl font-light mb-6">Tous les posts</h1>
         <button
           onClick={() => router.push("/admin/posts/new")}
-          className="mt-6 border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
+          className="mb-6 border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
         >
-          Créer un post
+          Créer un nouveau post
         </button>
       </div>
 
@@ -73,7 +73,7 @@ export default function AdminPostPage() {
                   await fetch(`/api/posts/${post.slug}`, { method: "DELETE" });
                   setPosts((prev) => prev.filter((p) => p.slug !== post.slug));
                 }}
-                className="border border-[#990021] text-[#990021] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#990021] hover:text-white transition"
+                className="border border-red-500 text-red-500 px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#990021] hover:text-white transition"
               >
                 Supprimer
               </button>

@@ -1,31 +1,30 @@
-// app/auth/signin/SigninForm.jsx
 'use client'
 
 import { useEffect, useState } from 'react'
-import { signIn, useSession }  from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
 
 export default function SignInForm() {
   const { data: session, status } = useSession()
-  const router                   = useRouter()
-  const params                   = useSearchParams()
-  const errorFromUrl             = params.get('error')
+  const router = useRouter()
+  const params = useSearchParams()
+  const errorFromUrl = params.get('error')
 
-  const [email, setEmail]         = useState('')
-  const [password, setPassword]   = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  // Already signed in?
   useEffect(() => {
     if (status === 'authenticated') router.replace('/admin')
   }, [status, router])
 
-  // Show invalid-credentials message
   useEffect(() => {
     if (errorFromUrl) setErrorMessage('Email ou mot de passe invalide')
   }, [errorFromUrl])
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMessage('')
 
@@ -37,47 +36,79 @@ export default function SignInForm() {
     })
   }
 
-  if (status === 'loading' || status === 'authenticated') {
-    return null
-  }
+  if (status === 'loading' || status === 'authenticated') return null
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-full max-w-sm space-y-6"
-      >
-        <h1 className="text-2xl font-bold text-center">Se connecter</h1>
-        {errorMessage && (
-          <p className="text-red-600 text-sm text-center">{errorMessage}</p>
-        )}
-        <div>
-          <label className="block text-sm font-medium">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-            className="mt-1 w-full p-2 border rounded"
-          />
+    <main className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#0f172a] text-white">
+      {/* Formulaire centré */}
+      <div className="flex items-center justify-center px-6 sm:px-12 lg:px-24 py-12">
+        <div className="w-full max-w-md space-y-6">
+          <h1 className="text-2xl font-light text-white">Connexion</h1>
+
+          {errorMessage && (
+            <p className="text-red-400 text-sm">{errorMessage}</p>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-white">Email</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-light text-gray-600 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-1 focus:outline-gray-600 sm:text-sm/6"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-white">Mot de passe</label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                 className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-light text-gray-600 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-1 focus:-outline-offset-1 focus:outline-gray-600 sm:text-sm/6"
+              />
+            </div>
+
+            <div className="flex justify-between items-center text-sm text-white/80">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="form-checkbox accent-[#009992]" />
+                <span>Se souvenir de moi</span>
+              </label>
+              <a href="#" className="text-white hover:underline">
+                Mot de passe oublié ?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full border border-white] text-white px-4 py-2 rounded-full text-sm uppercase hover:bg-[#027771] hover:text-white transition"
+            >
+              Connexion
+            </button>
+          </form>
+
+          <Link
+            href="/"
+            className="block text-center text-sm text-white hover:underline"
+          >
+            Retour à l'accueil
+          </Link>
         </div>
-        <div>
-          <label className="block text-sm font-medium">Mot de passe</label>
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-            className="mt-1 w-full p-2 border rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Connexion
-        </button>
-      </form>
+      </div>
+
+      {/* Image uniquement en desktop */}
+      <div className="hidden lg:block relative">
+        <Image
+          src="/images/qigong.png"
+          alt="Illustration"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
     </main>
   )
 }

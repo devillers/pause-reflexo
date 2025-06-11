@@ -222,10 +222,19 @@ export default function EditSoinAdminPage() {
             </label>
             <textarea
               name="description"
-              rows={5}
+              ref={(el) => {
+                if (el) {
+                  el.style.height = "auto";
+                  el.style.height = el.scrollHeight + "px";
+                }
+              }}
               value={form.description || ""}
-              onChange={handleChange}
-              className="mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-light text-gray-600 outline-1 -outline-offset-1 outline-gray-300 focus:outline-gray-600 sm:text-sm"
+              onInput={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = e.target.scrollHeight + "px";
+                handleChange(e);
+              }}
+              className="resize-none overflow-hidden mt-2 block w-full rounded-md bg-white px-3 py-1.5 text-light text-gray-600 outline-1 -outline-offset-1 outline-gray-300 focus:outline-gray-600 sm:text-sm"
             />
           </div>
 

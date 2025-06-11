@@ -1,3 +1,102 @@
+/* globals.css */
+
 @import "tailwindcss";
 
+/* 1. TAILWIND */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* 2. VOS STYLES PERSONNALISÉS */
+@layer components {
+  /* TITRES */
+  .prose h1 {
+    @apply text-3xl font-light leading-tight;
+  }
+  .prose h2 {
+    @apply text-3xl font-light mt-6 mb-2;
+  }
+
+  /* PARAGRAPHES */
+  .prose p {
+    @apply mt-4 mb-4 leading-relaxed;
+  }
+
+  /* LIENS */
+  .prose a {
+    @apply text-[#009992] underline font-medium;
+  }
+
+  /* LISTES */
+  .prose ul {
+    @apply list-disc pl-6 mt-3 mb-3;
+  }
+  .prose ul li {
+    @apply mt-2 mb-2;
+  }
+  .prose ol {
+    @apply list-decimal pl-6 mt-3 mb-3;
+  }
+  .prose ol li {
+    @apply mt-2 mb-2;
+  }
+
+  /* BLOCQUOTES */
+  .prose blockquote {
+    @apply italic border-l-4 border-gray-200 pl-4 text-gray-600;
+  }
+
+  /* CODE INLINE */
+  .prose code::before,
+  .prose code::after {
+    content: none;
+  }
+  .prose code {
+    @apply bg-gray-100 px-1 py-0.5 rounded text-sm;
+  }
+
+  /* STYLES CALENDRIER */
+  .react-calendar {
+    width: 100%;
+    border: none;
+    font-family: inherit;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
+  }
+
+  .react-calendar__navigation button {
+    @apply text-gray-800 font-semibold text-base;
+    min-width: 44px;
+    background: none;
+    border-radius: 8px;
+    margin: 0 0.25rem;
+    transition: background 0.2s ease;
+  }
+  .react-calendar__navigation button:enabled:hover {
+    background-color: #f0f0f0;
+  }
+
+  .react-calendar__month-view__weekdays {
+    @apply text-center font-semibold uppercase text-xs text-gray-500 pb-2;
+    border-bottom: 1px solid #eee;
+  }
+
+  .react-calendar__tile {
+    @apply text-gray-800 text-sm text-center rounded transition-all;
+    padding: 0.75rem 0.5rem;
+    line-height: 1.2;
+  }
+  .react-calendar__tile--now {
+    @apply bg-blue-100 text-blue-600 font-semibold;
+  }
+  .react-calendar__tile--active {
+    @apply bg-blue-600 text-white;
+  }
+  .react-calendar__tile:enabled:hover {
+    @apply bg-blue-50 text-blue-700;
+  }
+  .react-calendar__month-view__days__day--weekend {
+    @apply text-red-600;
+  }
+}

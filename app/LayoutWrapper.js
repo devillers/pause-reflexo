@@ -1,6 +1,6 @@
 //app/LayoutWrapper.js
 
-// app/LayoutWrapper.js
+
 
 "use client";
 
@@ -20,6 +20,7 @@ export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
   const isSignin = pathname === '/auth/signin';
+  const isContact = pathname === '/contact';
 
   //const showLayout = !hideLayout && !isAdmin && !isSignin;
 
@@ -47,7 +48,7 @@ export default function LayoutWrapper({ children }) {
       {!isAdmin && !isSignin && !hideLayout && <Header />}
       <main>{children}</main>
       {!isAdmin && !isSignin && !hideLayout && <Footer />}
-      {!isAdmin && !isSignin && !hideLayout && <FloatingContact />}
+      {!isAdmin && !isSignin && !isContact && !hideLayout && <FloatingContact />}
 
       {/* Cookie Consent */}
       {!isAdmin && !isSignin && (

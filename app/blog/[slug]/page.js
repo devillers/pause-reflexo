@@ -1,14 +1,17 @@
-// app/blog/[slug]/page.js
-import { notFound } from "next/navigation";
+//app/blog/[slug]/page.js
 
+import { notFound } from "next/navigation";
 import { connectDb } from "../../../lib/db.mjs";
 import Post from "../../../models/Post.mjs";
 import PostPageActions from "./actions.client";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw"; // pour autoriser HTML dans markdown si nécessaire
+
 export const runtime = "nodejs";
 
 export async function generateMetadata({ params }) {
-  // Next.js 15 : params est un Promise
   const { slug } = await params;
   await connectDb();
   const post = await Post.findOne({ slug });
@@ -16,7 +19,6 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function PostPage({ params }) {
-  // Next.js 15 : attendre params avant destructuration
   const { slug } = await params;
 
   await connectDb();
@@ -26,35 +28,33 @@ export default async function PostPage({ params }) {
   return (
     <>
       <section
-        className="relative h-[540px] bg-cover bg-center"
+        className="relative h-[640px] bg-cover bg-center"
         style={{ backgroundImage: `url(${post.image || "/images/blog.webp"})` }}
       >
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-bl from-transparent to-black/70 z-10" />
-
-        {/* Text content */}
-        <div className="relative z-20 max-w-[660px]  h-full flex items-center p-6">
+        <div className="relative z-20 max-w-[660px] h-full flex items-center p-6">
           <h1 className="text-4xl md:text-6xl text-white font-bold uppercase">
             {post.title}
           </h1>
         </div>
       </section>
 
-    <article className="p-8 max-w-3xl mx-auto space-y-6">
-<div
-  className="prose prose-lg text-justify max-w-none"
-  dangerouslySetInnerHTML={{
-    __html: post.description
-      .replace(/\n/g, '<br />')
-      .replace(/- (.+)/g, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)+/g, match => `<ul>${match}</ul>`)
-  }}
-/>
+      <article className="p-8 max-w-4xl mx-auto space-y-6">
+        <h3 className="text-4xl font-thin uppercase mb-4">
+          {post.second_title || "Un titre secondaire"}
+        </h3>
 
-  {/* Ces boutons n’apparaissent que pour un admin connecté */}
-  <PostPageActions slug={slug} />
-</article>
+        <div className="prose prose-lg max-w-none text-justify text-[14px] text-gray-800 line-height-7">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]} // support HTML dans le contenu markdown
+          >
+            {post.description}
+          </ReactMarkdown>
+        </div>
 
+        <PostPageActions slug={slug} />
+      </article>
     </>
   );
 }

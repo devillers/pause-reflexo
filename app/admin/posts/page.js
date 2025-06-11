@@ -53,6 +53,7 @@ export default function AdminPostPage() {
               </div>
               <div>
                 <h2 className="font-light text-sm uppercase">{post.title}</h2>
+                 <h2 className="font-light text-sm uppercase">{post.second_title}</h2>
                 <p className="text-xs font-thin text-gray-700">
                   Catégorie : {post.category || "—"}
                 </p>

@@ -5,11 +5,16 @@ import { useSession, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { MdDashboard } from "react-icons/md";
+import { TbMassage } from "react-icons/tb";
+import { CiBookmark } from "react-icons/ci";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { SiGoogleanalytics } from "react-icons/si";
+
 import {
   FiMenu,
   FiX,
   FiFileText,
-  FiPlus,
+  FiUsers,
   FiSettings,
   FiLogOut,
 } from "react-icons/fi";
@@ -45,46 +50,71 @@ export default function Sidebar() {
       >
 
          <SidebarLink
-          icon={<MdDashboard />}
+          icon={<MdDashboard className="text-[17px]"/>}
           label="Dashboard"
           href="/admin"
           open={open}
+         
         />
         <SidebarLink
-          icon={<FiFileText />}
+          icon={<FiFileText className="text-[17px]"/>}
           label="Posts"
           href="/admin/posts"
           open={open}
         />
+       
         <SidebarLink
-          icon={<FiPlus />}
-          label="Nouveau post"
-          href="/admin/posts/new"
-          open={open}
-        />
-        <SidebarLink
-          icon={<FiFileText />}
+          icon={<TbMassage className="text-[17px]"/>}
           label="Soins"
           href="/admin/soins"
           open={open}
         />
 
         <SidebarLink
-          icon={<FiPlus />}
-          label="Nouveau soin"
-          href="/admin/soins/new"
+          icon={<CiBookmark className="text-[17px]"/>}
+          label="All posts"
+          href="/admin/allPosts"
           open={open}
         />
-        {/* {isAdmin && (
+
+     
+        
+          {isAdmin && (
           <SidebarLink
-            icon={<FiSettings />}
-            label="Paramètres"
+            icon={<FiUsers className="text-[17px]"/>}
+            label="Utilisateurs"
+            href="/admin/users"
+            open={open}
+          />
+        )}
+
+         {isAdmin && (
+          <SidebarLink
+            icon={<MdOutlineMailOutline className="text-[17px]"/>}
+            label="email"
+            href="/admin/emails"
+            open={open}
+          />
+        )}
+          {isAdmin && (
+          <SidebarLink
+            icon={<SiGoogleanalytics className="text-[17px]"/>}
+            label="analytics"
+            href="/admin/analytics"
+            open={open}
+          />
+        )}
+
+        {isAdmin && (
+          <SidebarLink
+            icon={<FiSettings className="text-[17px]"/>}
+            label="Settings"
             href="/admin/settings"
             open={open}
           />
-        )} */}
+        )}
         <SidebarLink
-          icon={<FiFileText />}
+          icon={<FiFileText className="text-[17px]"/>}
           label="Retour au site"
           href="/"
           open={open}

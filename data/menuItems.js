@@ -18,7 +18,7 @@ const menuItems = [
     title: "Blog",
     href: "/blog",
   },
-  { title: "contact", href: "/#contact" },
+  { title: "contact", href: "/contact" },
   {
     title: "06 09 07 74 38",
     href: "tel:+33609077438",

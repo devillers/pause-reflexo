@@ -60,8 +60,8 @@ export default async function BlogPage() {
                     <div className="absolute inset-0 bg-black/20 transition-all group-hover:bg-opacity-40" />
                     {/* Content */}
                     <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-6">
-                      <h3 className="text-white text-xl font-bold mb-4 drop-shadow" >
-                      {post.title}</h3>
+                      <h3 className="text-white text-xl font-semibold mb-4 drop-shadow" >
+                      {post.second_title}</h3>
                       <span className="bg-white text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition">
                         Voir
                       </span>

@@ -39,11 +39,11 @@ export default function SignInForm() {
   if (status === 'loading' || status === 'authenticated') return null
 
   return (
-    <main className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-[#0f172a] text-white">
+    <main className="min-h-screen grid grid-cols-1 lg:grid-cols-2  text-white">
       {/* Formulaire centré */}
       <div className="flex items-center justify-center px-6 sm:px-12 lg:px-24 py-12">
         <div className="w-full max-w-md space-y-6">
-          <h1 className="text-2xl font-light text-white">Connexion</h1>
+          <h1 className="text-2xl font-light text-gray-800">Connexion</h1>
 
           {errorMessage && (
             <p className="text-red-400 text-sm">{errorMessage}</p>
@@ -51,7 +51,7 @@ export default function SignInForm() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-white">Email</label>
+              <label className="block text-sm font-medium text-gray-800">Email</label>
               <input
                 type="email"
                 required
@@ -62,7 +62,7 @@ export default function SignInForm() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-white">Mot de passe</label>
+              <label className="block text-sm font-medium text-gray-800">Mot de passe</label>
               <input
                 type="password"
                 required
@@ -72,19 +72,19 @@ export default function SignInForm() {
               />
             </div>
 
-            <div className="flex justify-between items-center text-sm text-white/80">
+            <div className="flex justify-between items-center text-sm text-gray-800">
               <label className="flex items-center gap-2">
                 <input type="checkbox" className="form-checkbox accent-[#009992]" />
                 <span>Se souvenir de moi</span>
               </label>
-              <a href="#" className="text-white hover:underline">
+              <a href="#" className="text-gray-800 hover:underline">
                 Mot de passe oublié ?
               </a>
             </div>
 
             <button
               type="submit"
-              className="w-full border border-white] text-white px-4 py-2 rounded-full text-sm uppercase hover:bg-[#027771] hover:text-white transition"
+              className="w-full border border-white] text-gray-800 px-4 py-2 rounded-full text-sm uppercase hover:bg-[#027771] hover:text-white transition"
             >
               Connexion
             </button>
@@ -92,7 +92,7 @@ export default function SignInForm() {
 
           <Link
             href="/"
-            className="block text-center text-sm text-white hover:underline"
+            className="block text-center text-sm text-gray-800 hover:underline"
           >
             Retour à l'accueil
           </Link>
@@ -102,7 +102,7 @@ export default function SignInForm() {
       {/* Image uniquement en desktop */}
       <div className="hidden lg:block relative">
         <Image
-          src="/images/qigong.png"
+          src="/images/zen.png"
           alt="Illustration"
           fill
           className="object-cover"

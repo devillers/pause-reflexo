@@ -1,4 +1,5 @@
 // app/api/auth/[...nextauth]/route.js
-import { handlers } from '../../../../auth.js'
+import { handlers } from "../../../../auth.js";
 
-export const { GET, POST } = handlers
+// App Router attend exactement ces exports
+export const { GET, POST } = handlers;

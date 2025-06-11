@@ -99,7 +99,7 @@ export default function AdminEmailsPage() {
       </div>
 
       {/* Desktop: Table visible from lg */}
-      <div className="hidden lg:block mt-8 flow-root">
+      <div className="hidden lg:block mt-8 ">
         <div className="-my-2 overflow-x-auto">
           <div className="inline-block min-w-full py-2 align-middle">
             <div className="overflow-hidden shadow md:rounded-lg">

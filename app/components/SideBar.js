@@ -1,15 +1,17 @@
+// components/SideBar.jsx
 "use client";
 
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
+
 import { MdDashboard } from "react-icons/md";
 import { TbMassage } from "react-icons/tb";
 import { CiBookmark } from "react-icons/ci";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { SiGoogleanalytics } from "react-icons/si";
-
 import {
   FiMenu,
   FiX,
@@ -21,16 +23,22 @@ import {
 
 export default function Sidebar() {
   const { data: session } = useSession();
-  const [open, setOpen] = useState(true);
-
+  // ← passer false pour que la sidebar soit fermée au départ
+  const [open, setOpen] = useState(false);
   const isAdmin = session?.user?.role === "admin";
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    router.push("/");
+  };
 
   return (
     <motion.div
       animate={{ width: open ? 240 : 64 }}
       className="bg-[#212b37] shadow-sm flex flex-col min-h-screen transition-all duration-300"
     >
-      {/* Top header */}
+      {/* Header */}
       <div
         className={`flex items-center p-4 ${
           open ? "justify-between" : "justify-center"
@@ -42,79 +50,71 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* Navigation */}
+      {/* Nav */}
       <nav
         className={`flex flex-col mt-4 space-y-2 uppercase font-thin text-white text-[13px] ${
           open ? "items-start pl-2" : "items-center"
         }`}
       >
-
-         <SidebarLink
-          icon={<MdDashboard className="text-[17px]"/>}
+        <SidebarLink
+          icon={<MdDashboard className="text-[17px]" />}
           label="Dashboard"
           href="/admin"
           open={open}
-         
         />
         <SidebarLink
-          icon={<FiFileText className="text-[17px]"/>}
+          icon={<FiFileText className="text-[17px]" />}
           label="Posts"
           href="/admin/posts"
           open={open}
         />
-       
         <SidebarLink
-          icon={<TbMassage className="text-[17px]"/>}
+          icon={<TbMassage className="text-[17px]" />}
           label="Soins"
           href="/admin/soins"
           open={open}
         />
-
         <SidebarLink
-          icon={<CiBookmark className="text-[17px]"/>}
+          icon={<CiBookmark className="text-[17px]" />}
           label="All posts"
           href="/admin/allPosts"
           open={open}
         />
 
-     
-        
-          {isAdmin && (
+        {isAdmin && (
           <SidebarLink
-            icon={<FiUsers className="text-[17px]"/>}
+            icon={<FiUsers className="text-[17px]" />}
             label="Utilisateurs"
             href="/admin/users"
             open={open}
           />
         )}
-
-         {isAdmin && (
+        {isAdmin && (
           <SidebarLink
-            icon={<MdOutlineMailOutline className="text-[17px]"/>}
-            label="email"
+            icon={<MdOutlineMailOutline className="text-[17px]" />}
+            label="Emails"
             href="/admin/emails"
             open={open}
           />
         )}
-          {isAdmin && (
+        {isAdmin && (
           <SidebarLink
-            icon={<SiGoogleanalytics className="text-[17px]"/>}
-            label="analytics"
+            icon={<SiGoogleanalytics className="text-[17px]" />}
+            label="Analytics"
             href="/admin/analytics"
             open={open}
           />
         )}
-
         {isAdmin && (
           <SidebarLink
-            icon={<FiSettings className="text-[17px]"/>}
+            icon={<FiSettings className="text-[17px]" />}
             label="Settings"
             href="/admin/settings"
             open={open}
           />
         )}
         <SidebarLink
-          icon={<FiFileText className="text-[17px]"/>}
+          icon={<FiFileText className="text-[17px]" />}
           label="Retour au site"
           href="/"
           open={open}
@@ -123,10 +123,12 @@ export default function Sidebar() {
 
       {/* Déconnexion */}
       <div
-        className={`mt-auto mb-4 px-4 ${open ? "text-left" : "text-center"}`}
+        className={`mt-auto mb-4 px-4 ${
+          open ? "text-left" : "text-center"
+        }`}
       >
         <button
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={handleSignOut}
           className="text-red-300 text-sm flex items-center gap-2 hover:underline"
         >
           <FiLogOut />

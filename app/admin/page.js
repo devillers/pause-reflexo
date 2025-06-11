@@ -9,21 +9,34 @@ import "react-calendar/dist/Calendar.css";
 import StatCard from "../components/StatCard";
 
 export default function DashboardPage() {
+  // on initialise avec 0 ou une valeur par défaut
   const [stats, setStats] = useState({
-    users: 2,
-    posts: 4,
-    soins: 12,
-    appointments: 12,
-    messages: 12,
-    stripe: 300,
+    usersCount: 0,
+    postsCount: 0,
+    soinsCount: 0,
+    messagesCount: 0,
+    appointments: 0, // à remplacer par votre source réelle
+    stripe: 0, // idem
   });
   const [date, setDate] = useState(new Date());
 
   useEffect(() => {
     async function fetchStats() {
-      const res = await fetch("/api/dashboard/stats");
-      const data = await res.json();
-      setStats(data);
+      try {
+        const res = await fetch("/api/dashboard/stats");
+        if (!res.ok) throw new Error(`Stat fetch failed: ${res.status}`);
+        const data = await res.json();
+        // on ne remplace que les clés existantes, on conserve appointments et stripe
+        setStats((prev) => ({
+          ...prev,
+          usersCount: data.usersCount,
+          postsCount: data.postsCount,
+          soinsCount: data.soinsCount,
+          messagesCount: data.messagesCount,
+        }));
+      } catch (err) {
+        console.error("Erreur récupération stats :", err);
+      }
     }
     fetchStats();
   }, []);
@@ -36,46 +49,51 @@ export default function DashboardPage() {
         <StatCard
           icon={<MdPeople />}
           label="Utilisateurs"
-          value={stats.users}
-         
+          value={stats.usersCount}
         />
-        <StatCard icon={<FaBlog />} label="Articles" value={stats.posts}  change="11.01%"
-          direction="up"/>
-        <StatCard icon={<FaSpa />} label="Soins" value={stats.soins} change="11.01%"
-          direction="up" />
+        <StatCard
+          icon={<FaBlog />}
+          label="Articles"
+          value={stats.postsCount}
+          change="11.01%"
+          direction="up"
+        />
+        <StatCard
+          icon={<FaSpa />}
+          label="Soins"
+          value={stats.soinsCount}
+          change="11.01%"
+          direction="up"
+        />
         <StatCard
           icon={<MdEvent />}
           label="Rendez-vous"
-          value={stats.appointments}  change="11.01%"
+          value={stats.appointments}
+          change="11.01%"
           direction="up"
         />
         <StatCard
           icon={<MdMessage />}
           label="Messages"
-          value={stats.messages}  change="11.01%"
+          value={stats.messagesCount}
+          change="11.01%"
           direction="up"
         />
         <StatCard
           icon={<MdPayments />}
           label="Transactions Stripe"
-          value={stats.stripe}  change="30.01%"
+          value={stats.stripe}
+          change="30.01%"
           direction="up"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-10">
-        {/* Calendrier */}
-        <div className="bg-white p-6 rounded-lg shadow flex-1/3">
+      {/* <div className="grid grid-cols-1 lg:col-span-3  gap-4 mt-10">
+        <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-thin mb-4">Calendrier</h2>
           <Calendar onChange={setDate} value={date} />
         </div>
-
-        {/* Bloc Google Analytics */}
-        <div className="bg-white p-6 rounded-lg shadow lg:col-span-2">
-          <h2 className="text-xl font-thin mb-4">Google Analytics</h2>
-          <p className="text-gray-600">À connecter via Google API...</p>
-        </div>
-      </div>
+      </div> */}
     </main>
   );
 }

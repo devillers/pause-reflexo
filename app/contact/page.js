@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { GoChevronDown } from 'react-icons/go';
 import { FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
-import HeroHeaderContact from '../components/HeroHeaderCcontact';
+import HeroHeaderContact from '../components/HeroHeaderContact';
 
 export default function Example() {
   const [form, setForm] = useState({

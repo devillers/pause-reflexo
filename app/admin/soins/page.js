@@ -29,7 +29,7 @@ export default function AdminSoinsPage() {
         <h1 className="text-3xl font-thin mb-6">Tous les soins</h1>
         <button
           onClick={() => router.push("/admin/posts/new")}
-          className="mb-6 cursor-pointer inline-flex items-center rounded-md bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-purple-700/10 ring-inset"
+           className="mb-6 border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
         >
           Créer un soin
         </button>
@@ -41,7 +41,7 @@ export default function AdminSoinsPage() {
           <a
             key={cat}
             href={`#cat-${cat.replace(/\s+/g, "-").toLowerCase()}`}
-            className="text-sm font-medium text-[#009992] hover:underline"
+           className="mb-6 cursor-pointer inline-flex items-center rounded-md bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-purple-700/10 ring-inset"
           >
             {cat}
           </a>
@@ -90,7 +90,7 @@ export default function AdminSoinsPage() {
                 <div className="flex gap-4 self-start sm:self-center">
                   <button
                     onClick={() => router.push(`/admin/soins/${soin.slug}/edit`)}
-                    className="cursor-pointer inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset"
+                   className="border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#027771] hover:text-white transition"
                   >
                     Modifier
                   </button>
@@ -100,7 +100,7 @@ export default function AdminSoinsPage() {
                       await fetch(`/api/soins/${soin.slug}`, { method: "DELETE" });
                       setSoins((prev) => prev.filter((s) => s.slug !== soin.slug));
                     }}
-                    className="cursor-pointer inline-flex items-center rounded-md bg-red-100 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-700/10 ring-inset"
+                    className="border border-red-500 text-red-500 px-4 py-2 rounded-full text-[10px] uppercase hover:bg-[#990021] hover:text-white transition"
                   >
                     Supprimer
                   </button>

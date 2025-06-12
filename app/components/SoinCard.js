@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { IoMdTime } from "react-icons/io";
 
 export default function SoinCard({ soin }) {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function SoinCard({ soin }) {
   return (
     <li className="relative w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition flex flex-col h-[300px]">
       {/* Dropdown menu bouton */}
-      <div className="absolute right-4 top-4 z-20" ref={dropdownRef}>
+      {/* <div className="absolute right-4 top-4 z-20" ref={dropdownRef}>
         <div className="relative inline-block text-left">
           <button
             type="button"
@@ -58,7 +59,7 @@ export default function SoinCard({ soin }) {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Image & Content */}
       <div className="flex flex-col flex-grow p-4 items-center text-center">
@@ -67,7 +68,7 @@ export default function SoinCard({ soin }) {
         </div>
         <h3 className="my-2 text-md font-light uppercase text-gray-900">{soin.title}</h3>
         {soin.prix && <div className="text-sm text-gray-500">Prix : {soin.prix} €</div>}
-        {soin.duree && <div className="text-sm text-gray-500">Durée : {soin.duree} mn</div>}
+        {soin.duree && <div className="text-sm flex items-center text-gray-7 00">  <IoMdTime className="mr-1" />{soin.duree} mn</div>}
         <div className="flex-grow"></div>
        
       </div>

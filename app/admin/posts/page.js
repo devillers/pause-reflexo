@@ -25,7 +25,7 @@ export default function AdminPostPage() {
           onClick={() => router.push("/admin/posts/new")}
           className="mb-6 border border-[#009992] text-[#009992] px-4 py-2 rounded-full text-xs uppercase hover:bg-[#027771] hover:text-white transition"
         >
-          Créer un nouveau post
+          Créer un article
         </button>
       </div>
 

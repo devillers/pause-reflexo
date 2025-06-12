@@ -1,6 +1,7 @@
 // app/soin/[slug]/page.js
 import { notFound } from "next/navigation";
 import { connectDb } from "../../../lib/db.mjs";
+import { CiTimer } from "react-icons/ci";
 import Soin from "../../../models/Soin.mjs";
 import SoinPageActions from "./actions.client.js";
 
@@ -45,7 +46,7 @@ export default async function SoinPage({ params }) {
           )}
           {soin.duree && (
             <p>
-              <strong>Durée :</strong> {soin.duree}
+              <strong><CiTimer/></strong> {soin.duree}
             </p>
           )}
         </div>

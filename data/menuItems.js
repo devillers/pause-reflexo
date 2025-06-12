@@ -3,10 +3,10 @@ import { FiPhone } from "react-icons/fi";
 const menuItems = [
   { title: "Accueil", href: "/" },
   {
-    title: "les soins",
-    href: "/soin",
+    title: "les séances",
+    href: "/soins",
   },
-  { title: "à propos ", href: "/#apropros" },
+ 
   {
     title: "rdv",
     href: "https://www.crenolibre.fr/moteur/124911_durindel-cecile",

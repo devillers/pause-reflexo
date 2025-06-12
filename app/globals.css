@@ -1,25 +1,36 @@
 /* globals.css */
 
 @import "tailwindcss";
-
-/* 1. TAILWIND */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* //@plugin "@tailwindcss/typography"; */
 
 /* 2. VOS STYLES PERSONNALISÉS */
 @layer components {
   /* TITRES */
   .prose h1 {
-    @apply text-3xl font-light leading-tight;
+    font-size: 20px;
+    font-weight: 100;
+    margin-bottom: 10px;
+    color: gray;
+    text-transform: capitalize;
+    
   }
   .prose h2 {
-    @apply text-3xl font-light mt-6 mb-2;
+     font-size: 10px;
+    color: red;
+  }
+
+  .prose h3 {
+     font-size: 20px;
+    color: gray;
+    margin-bottom: 10px;
+     margin-top: 10px;
+     font-weight: 100;
   }
 
   /* PARAGRAPHES */
   .prose p {
-    @apply mt-4 mb-4 leading-relaxed;
+    margin-top: 10px;
+   
   }
 
   /* LIENS */
@@ -29,11 +40,13 @@
 
   /* LISTES */
   .prose ul {
-    @apply list-disc pl-6 mt-3 mb-3;
+      list-style: disc;
   }
-  .prose ul li {
-    @apply mt-2 mb-2;
-  }
+  .prose li {
+    list-style: disc;  
+    margin-left: 20px;
+    line-height: 25px
+}
   .prose ol {
     @apply list-decimal pl-6 mt-3 mb-3;
   }

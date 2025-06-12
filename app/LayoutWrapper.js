@@ -21,6 +21,7 @@ export default function LayoutWrapper({ children }) {
   const isAdmin = pathname.startsWith('/admin');
   const isSignin = pathname === '/auth/signin';
   const isContact = pathname === '/contact';
+  const isSoins = pathname.startsWith('/soins');
 
   //const showLayout = !hideLayout && !isAdmin && !isSignin;
 
@@ -48,7 +49,7 @@ export default function LayoutWrapper({ children }) {
       {!isAdmin && !isSignin && !hideLayout && <Header />}
       <main>{children}</main>
       {!isAdmin && !isSignin && !hideLayout && <Footer />}
-      {!isAdmin && !isSignin && !isContact && !hideLayout && <FloatingContact />}
+      {!isAdmin && !isSignin && !isContact && !isSoins && !hideLayout && <FloatingContact />}
 
       {/* Cookie Consent */}
       {!isAdmin && !isSignin && (

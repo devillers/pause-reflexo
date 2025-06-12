@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { MdPeople, MdEvent, MdMessage, MdPayments } from "react-icons/md";
 import { FaBlog, FaSpa } from "react-icons/fa";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-
 import StatCard from "../components/StatCard";
+import Link from "next/link";
 
 export default function DashboardPage() {
   // on initialise avec 0 ou une valeur par défaut
@@ -46,46 +44,60 @@ export default function DashboardPage() {
       <h1 className="text-3xl font-thin mb-6">Dashboard</h1>
 
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <StatCard
-          icon={<MdPeople />}
-          label="Utilisateurs"
-          value={stats.usersCount}
-        />
-        <StatCard
-          icon={<FaBlog />}
-          label="Articles"
-          value={stats.postsCount}
-          change="11.01%"
-          direction="up"
-        />
-        <StatCard
-          icon={<FaSpa />}
-          label="Soins"
-          value={stats.soinsCount}
-          change="11.01%"
-          direction="up"
-        />
-        <StatCard
-          icon={<MdEvent />}
-          label="Rendez-vous"
-          value={stats.appointments}
-          change="11.01%"
-          direction="up"
-        />
-        <StatCard
-          icon={<MdMessage />}
-          label="Messages"
-          value={stats.messagesCount}
-          change="11.01%"
-          direction="up"
-        />
-        <StatCard
-          icon={<MdPayments />}
-          label="Transactions Stripe"
-          value={stats.stripe}
-          change="30.01%"
-          direction="up"
-        />
+        <Link href="/admin/users">
+          <StatCard
+            icon={<MdPeople />}
+            label="Utilisateurs"
+            value={stats.usersCount}
+          />
+        </Link>
+
+        <Link href="/admin/posts">
+          <StatCard
+            icon={<FaBlog />}
+            label="Articles"
+            value={stats.postsCount}
+            change="11.01%"
+            direction="up"
+          />
+        </Link>
+
+        <Link href="/admin/soins">
+          <StatCard
+            icon={<FaSpa />}
+            label="Soins"
+            value={stats.soinsCount}
+            change="11.01%"
+            direction="up"
+          />
+        </Link>
+        <Link href="/admin/rendez-vous">
+          <StatCard
+            icon={<MdEvent />}
+            label="Rendez-vous"
+            value={stats.appointments}
+            change="11.01%"
+            direction="up"
+          />
+        </Link>
+        <Link href="/admin/emails">
+          <StatCard
+            icon={<MdMessage />}
+            label="Messages"
+            value={stats.messagesCount}
+            change="11.01%"
+            direction="up"
+          />
+        </Link>
+        <Link href="/admin/stripe">
+          <StatCard
+            icon={<MdPayments />}
+            label="Transactions Stripe"
+            value={stats.stripe}
+            change="30.01%"
+            direction="up"
+          />
+        </Link>
       </div>
 
       {/* <div className="grid grid-cols-1 lg:col-span-3  gap-4 mt-10">

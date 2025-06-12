@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.9.1",
-    "@tailwindcss/typography": "^0.5.16",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.1",
     "dotenv": "^16.5.0",
@@ -40,9 +39,10 @@
     "streamifier": "^0.1.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/postcss": "^4.1.10",
+    "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.4",
-    "tailwindcss": "^4.1.8"
+    "postcss": "^8.5.5",
+    "tailwindcss": "^4.1.10"
   }
 }

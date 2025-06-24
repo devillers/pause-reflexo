@@ -1,10 +1,9 @@
-<<<<<<< HEAD
+
 //app/admin/settings/page.js
 
-=======
+
 import menuItems from "../../../data/menuItems";
 import Link from "next/link";
->>>>>>> 4ce17716a0a63795e5416364d7e34c0f7661f793
 
 export default function SettingsPage() {
   return (

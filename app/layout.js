@@ -4,11 +4,6 @@ import LayoutWrapper from './LayoutWrapper'
 import Providers from './providers'
 import Head from 'next/head'
 
-export const metadata = {
-  title: 'Pause Réflexo',
-  description: '...',
-};
-
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">

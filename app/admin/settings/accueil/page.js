@@ -22,43 +22,46 @@ export default function SettingsPageAccueil() {
     aboutParagraphs: [],
   });
 
-useEffect(() => {
-  async function loadData() {
-    try {
-      const res = await fetch("/api/admin/accueil-data", {
-        cache: "no-store",
-      });
-      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-      const doc = await res.json();
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // fetch(..., { cache: 'no-store' })
+        const res = await fetch(
+          "https://pausereflexo.fr/api/admin/accueil-data",
+          { cache: "no-store" }
+        );
 
-      console.log("[PROD] Données reçues de /accueil-data :", doc);
+        if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+        const doc = await res.json();
 
-      setData(doc);
-      setForm({
-        heroTitleLine1: doc.heroTitleLine1 || "",
-        heroTitleLine2: doc.heroTitleLine2 || "",
-        heroTitleLine3: doc.heroTitleLine3 || "",
-        heroTitleLine4: doc.heroTitleLine4 || "",
-        heroTitleLine5: doc.heroTitleLine5 || "",
-        soinsTitle: doc.soinsSection?.title || "",
-        soinsSubtitle: doc.soinsSection?.subtitle || "",
-        soinsTagline: doc.soinsSection?.tagline || "",
-        aboutTitle: doc.aboutSection?.title || "",
-        aboutParagraphs:
-          doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
-            ? doc.aboutSection.paragraphs
-            : [],
-      });
+        console.log("[PROD] Données reçues de /accueil-data :", doc);
 
-      setHeroImagePreview(doc.heroImageUrl || "");
-    } catch (error) {
-      console.error("❌ Erreur chargement accueil:", error);
-      setData(null); // bloque le rendu pour éviter .map sur null
+        setData(doc);
+        setForm({
+          heroTitleLine1: doc.heroTitleLine1 || "",
+          heroTitleLine2: doc.heroTitleLine2 || "",
+          heroTitleLine3: doc.heroTitleLine3 || "",
+          heroTitleLine4: doc.heroTitleLine4 || "",
+          heroTitleLine5: doc.heroTitleLine5 || "",
+          soinsTitle: doc.soinsSection?.title || "",
+          soinsSubtitle: doc.soinsSection?.subtitle || "",
+          soinsTagline: doc.soinsSection?.tagline || "",
+          aboutTitle: doc.aboutSection?.title || "",
+          aboutParagraphs:
+            doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
+              ? doc.aboutSection.paragraphs
+              : [],
+        });
+
+        setHeroImagePreview(doc.heroImageUrl || "");
+      } catch (error) {
+        console.error("❌ Erreur chargement accueil:", error);
+        setData(null); // bloque le rendu pour éviter .map sur null
+      }
     }
-  }
 
-  loadData();
-}, []);
+    loadData();
+  }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },
@@ -74,29 +77,29 @@ useEffect(() => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-const handleSubmit = async () => {
-  const body = new FormData();
-  for (const key in form) {
-    if (Array.isArray(form[key])) {
-      form[key].forEach((val, i) => body.append(`${key}[${i}]`, val));
-    } else {
-      body.append(key, form[key]);
+  const handleSubmit = async () => {
+    const body = new FormData();
+    for (const key in form) {
+      if (Array.isArray(form[key])) {
+        form[key].forEach((val, i) => body.append(`${key}[${i}]`, val));
+      } else {
+        body.append(key, form[key]);
+      }
     }
-  }
 
-  const res = await fetch("/api/admin/update-accueil", {
-    method: "POST",
-    body,
-  });
+    const res = await fetch("/api/admin/update-accueil", {
+      method: "POST",
+      body,
+    });
 
-  if (res.ok) {
-    alert("✅ Données mises à jour !");
-    // Recharge les données depuis le backend pour être certain que le front est bien aligné
-    await loadData();
-  } else {
-    alert("❌ Erreur lors de la mise à jour.");
-  }
-};
+    if (res.ok) {
+      alert("✅ Données mises à jour !");
+      // Recharge les données depuis le backend pour être certain que le front est bien aligné
+      await loadData();
+    } else {
+      alert("❌ Erreur lors de la mise à jour.");
+    }
+  };
 
   const addParagraph = () => {
     setForm((prev) => ({
@@ -118,8 +121,8 @@ const handleSubmit = async () => {
     setForm((prev) => ({ ...prev, aboutParagraphs: updated }));
   };
 
-if (data === null) return <p className="p-6 text-red-500">❌ chargement en cours</p>;
-
+  if (data === null)
+    return <p className="p-6 text-red-500">❌ chargement en cours</p>;
 
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">

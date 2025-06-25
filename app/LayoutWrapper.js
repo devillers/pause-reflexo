@@ -1,37 +1,34 @@
-//app/LayoutWrapper.js
+'use client';
 
+import React, { useEffect, useState } from 'react';
+import Script from 'next/script';
+import CookieConsent from 'react-cookie-consent';
+import { usePathname } from 'next/navigation';
 
-
-"use client";
-
-import React from "react";
-import Script from "next/script";
-import CookieConsent from "react-cookie-consent";
-import Head from "next/head";
-import { usePathname } from "next/navigation";
-
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import { useLayout } from "./LayoutContext";
-import FloatingContact from "./components/FloatingContact";
+import Header from './components/Header';
+import Footer from './components/Footer';
+import FloatingContact from './components/FloatingContact';
+import { useLayout } from './LayoutContext';
 
 export default function LayoutWrapper({ children }) {
   const { hideLayout } = useLayout();
-  const pathname = usePathname();
+
+  const [isClient, setIsClient] = useState(false);
+  const [pathname, setPathname] = useState('');
+
+  useEffect(() => {
+    setIsClient(true);
+    setPathname(window.location.pathname);
+  }, []);
+
   const isAdmin = pathname.startsWith('/admin');
   const isSignin = pathname === '/auth/signin';
   const isContact = pathname === '/contact';
   const isSoins = pathname.startsWith('/soins');
 
-  //const showLayout = !hideLayout && !isAdmin && !isSignin;
-
   return (
     <>
-      <Head>
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
-      </Head>
-
+      {/* Google Analytics */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-FER4ECWWK3"
         strategy="afterInteractive"
@@ -46,12 +43,13 @@ export default function LayoutWrapper({ children }) {
         `}
       </Script>
 
+      {/* Layout */}
       {!isAdmin && !isSignin && !hideLayout && <Header />}
       <main>{children}</main>
       {!isAdmin && !isSignin && !hideLayout && <Footer />}
       {!isAdmin && !isSignin && !isContact && !isSoins && !hideLayout && <FloatingContact />}
 
-      {/* Cookie Consent */}
+      {/* Cookies */}
       {!isAdmin && !isSignin && (
         <CookieConsent
           disableStyles
@@ -94,10 +92,14 @@ export default function LayoutWrapper({ children }) {
           buttonText="J'accepte"
           declineButtonText="Je refuse"
           onAccept={() => {
-            window.gtag?.("consent", "update", { analytics_storage: "granted" });
+            if (typeof window !== 'undefined' && window.gtag) {
+              window.gtag("consent", "update", { analytics_storage: "granted" });
+            }
           }}
           onDecline={() => {
-            window.gtag?.("consent", "update", { analytics_storage: "denied" });
+            if (typeof window !== 'undefined' && window.gtag) {
+              window.gtag("consent", "update", { analytics_storage: "denied" });
+            }
           }}
         >
           <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -105,6 +107,7 @@ export default function LayoutWrapper({ children }) {
               src="/images/cookie.png"
               alt="Cookie"
               className="w-24 h-24 object-contain flex-shrink-0"
+              loading="lazy"
             />
             <p className="text-[12px] text-center sm:text-left">
               Ce site utilise des cookies pour améliorer votre expérience. Vous

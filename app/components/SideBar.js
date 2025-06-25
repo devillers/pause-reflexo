@@ -1,10 +1,13 @@
 // components/SideBar.jsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+
+import { FiChevronDown, FiChevronRight } from "react-icons/fi";
+
 import Link from "next/link";
 
 import { MdDashboard } from "react-icons/md";
@@ -22,6 +25,7 @@ import {
 } from "react-icons/fi";
 
 export default function Sidebar() {
+  const [showFrontendLinks, setShowFrontendLinks] = useState(false);
   const { data: session } = useSession();
   // ← passer false pour que la sidebar soit fermée au départ
   const [open, setOpen] = useState(false);
@@ -32,6 +36,17 @@ export default function Sidebar() {
     await signOut({ redirect: false });
     router.push("/");
   };
+
+  const [settingsLinks, setSettingsLinks] = useState([]);
+
+  useEffect(() => {
+    if (!open || !showFrontendLinks) return;
+
+    fetch("/api/admin/settings-pages")
+      .then((res) => res.json())
+      .then(setSettingsLinks)
+      .catch((err) => console.error("Erreur chargement menu settings", err));
+  }, [open, showFrontendLinks]);
 
   return (
     <motion.div
@@ -106,13 +121,42 @@ export default function Sidebar() {
           />
         )}
         {isAdmin && (
-          <SidebarLink
-            icon={<FiSettings className="text-[17px]" />}
-            label="Settings"
-            href="/admin/settings"
-            open={open}
-          />
+          <div className="w-full">
+            <button
+              onClick={() => setShowFrontendLinks((prev) => !prev)}
+              className={`
+            flex items-center w-full px-4 py-3 text-white hover:bg-[#181f27]
+            ${open ? "justify-start" : "justify-center"}
+          `}
+            >
+              <FiSettings className="text-[17px]" />
+              {open && (
+                <>
+                  <span className="ml-4 uppercase">Settings</span>
+                  <span className="ml-auto mr-2">
+                    {showFrontendLinks ? <FiChevronDown /> : <FiChevronRight />}
+                  </span>
+                </>
+              )}
+            </button>
+
+            {/* Sous-menu frontend dépliable */}
+            {open && showFrontendLinks && (
+              <div className="ml-15 mt-1 space-y-1">
+                {settingsLinks.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.href}
+                    className="block text-xs text-white px-4 py-3  hover:bg-[#181f27] "
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         )}
+
         <SidebarLink
           icon={<FiFileText className="text-[17px]" />}
           label="Retour au site"
@@ -123,9 +167,7 @@ export default function Sidebar() {
 
       {/* Déconnexion */}
       <div
-        className={`mt-auto mb-4 px-4 ${
-          open ? "text-left" : "text-center"
-        }`}
+        className={`mt-auto mb-4 px-4 ${open ? "text-left" : "text-center"}`}
       >
         <button
           onClick={handleSignOut}

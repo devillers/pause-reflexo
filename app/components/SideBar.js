@@ -39,14 +39,25 @@ export default function Sidebar() {
 
   const [settingsLinks, setSettingsLinks] = useState([]);
 
-  useEffect(() => {
-    if (!open || !showFrontendLinks) return;
+useEffect(() => {
+  if (!open || !showFrontendLinks) return;
 
-    fetch("/api/admin/settings-pages")
-      .then((res) => res.json())
-      .then(setSettingsLinks)
-      .catch((err) => console.error("Erreur chargement menu settings", err));
-  }, [open, showFrontendLinks]);
+  fetch("/api/admin/settings-pages")
+    .then((res) => res.json())
+    .then((json) => {
+      if (Array.isArray(json)) {
+        setSettingsLinks(json);
+      } else {
+        console.error("❌ Données invalides reçues pour settings-pages :", json);
+        setSettingsLinks([]); // pour éviter le crash
+      }
+    })
+    .catch((err) => {
+      console.error("Erreur chargement menu settings", err);
+      setSettingsLinks([]);
+    });
+}, [open, showFrontendLinks]);
+
 
   return (
     <motion.div

@@ -7,9 +7,15 @@ import path from "path";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const settingsDir = path.join(process.cwd(), "app", "admin", "settings");
-
   try {
+    const settingsDir = path.join(process.cwd(), "app", "admin", "settings");
+
+    // Vérifie si le répertoire existe
+    if (!fs.existsSync(settingsDir)) {
+      console.warn("⚠️ Le dossier 'settings' n'existe pas :", settingsDir);
+      return NextResponse.json([], { status: 200 });
+    }
+
     const items = fs
       .readdirSync(settingsDir, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())
@@ -20,8 +26,11 @@ export async function GET() {
 
     return NextResponse.json(items);
   } catch (error) {
-    console.error("Erreur lecture dossier settings:", error);
-    return NextResponse.json({ error: "Erreur lecture settings" }, { status: 500 });
+    console.error("❌ Erreur lecture dossier settings:", error);
+    return NextResponse.json(
+      { error: "Erreur lecture settings" },
+      { status: 500 }
+    );
   }
 }
 

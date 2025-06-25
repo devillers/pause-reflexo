@@ -57,7 +57,7 @@ useEffect(() => {
 
   loadData();
 }, []);
-s
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },
     onDrop: (acceptedFiles) => {

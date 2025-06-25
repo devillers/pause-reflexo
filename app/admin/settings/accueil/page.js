@@ -1,5 +1,3 @@
-//app/admin/settings/accueil/page.js
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -22,44 +20,39 @@ export default function SettingsPageAccueil() {
     aboutParagraphs: [],
   });
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        // fetch(..., { cache: 'no-store' })
-        const res = await fetch(
-          "https://pausereflexo.fr/api/admin/accueil-data",
-          { cache: "no-store" }
-        );
-
-        if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-        const doc = await res.json();
-
-        console.log("[PROD] Données reçues de /accueil-data :", doc);
-
-        setData(doc);
-        setForm({
-          heroTitleLine1: doc.heroTitleLine1 || "",
-          heroTitleLine2: doc.heroTitleLine2 || "",
-          heroTitleLine3: doc.heroTitleLine3 || "",
-          heroTitleLine4: doc.heroTitleLine4 || "",
-          heroTitleLine5: doc.heroTitleLine5 || "",
-          soinsTitle: doc.soinsSection?.title || "",
-          soinsSubtitle: doc.soinsSection?.subtitle || "",
-          soinsTagline: doc.soinsSection?.tagline || "",
-          aboutTitle: doc.aboutSection?.title || "",
-          aboutParagraphs:
-            doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
-              ? doc.aboutSection.paragraphs
-              : [],
-        });
-
-        setHeroImagePreview(doc.heroImageUrl || "");
-      } catch (error) {
-        console.error("❌ Erreur chargement accueil:", error);
-        setData(null); // bloque le rendu pour éviter .map sur null
-      }
+  // 👇 définie EN DEHORS du useEffect pour pouvoir être rappelée partout
+  const loadData = async () => {
+    try {
+      const res = await fetch(
+        "https://pausereflexo.fr/api/admin/accueil-data",
+        { cache: "no-store" }
+      );
+      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+      const doc = await res.json();
+      setData(doc);
+      setForm({
+        heroTitleLine1: doc.heroTitleLine1 || "",
+        heroTitleLine2: doc.heroTitleLine2 || "",
+        heroTitleLine3: doc.heroTitleLine3 || "",
+        heroTitleLine4: doc.heroTitleLine4 || "",
+        heroTitleLine5: doc.heroTitleLine5 || "",
+        soinsTitle: doc.soinsSection?.title || "",
+        soinsSubtitle: doc.soinsSection?.subtitle || "",
+        soinsTagline: doc.soinsSection?.tagline || "",
+        aboutTitle: doc.aboutSection?.title || "",
+        aboutParagraphs:
+          doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
+            ? doc.aboutSection.paragraphs
+            : [],
+      });
+      setHeroImagePreview(doc.heroImageUrl || "");
+    } catch (error) {
+      console.error("❌ Erreur chargement accueil:", error);
+      setData(null); // bloque le rendu pour éviter .map sur null
     }
+  };
 
+  useEffect(() => {
     loadData();
   }, []);
 
@@ -94,8 +87,7 @@ export default function SettingsPageAccueil() {
 
     if (res.ok) {
       alert("✅ Données mises à jour !");
-      // Recharge les données depuis le backend pour être certain que le front est bien aligné
-      await loadData();
+      await loadData(); // 👈 recharge bien le backend à jour
     } else {
       alert("❌ Erreur lors de la mise à jour.");
     }
@@ -127,7 +119,6 @@ export default function SettingsPageAccueil() {
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold">Modifier l'accueil</h1>
-
       {/* Hero Titles */}
       <div className="bg-white rounded p-6 shadow space-y-4">
         <h2 className="font-semibold">Lignes de titre</h2>
@@ -141,7 +132,6 @@ export default function SettingsPageAccueil() {
             placeholder={`Ligne ${n}`}
           />
         ))}
-
         {/* Image Hero */}
         <div className="mt-6">
           <h3 className="font-semibold mb-2">Image actuelle</h3>
@@ -151,11 +141,10 @@ export default function SettingsPageAccueil() {
               alt="Hero"
               width={600}
               height={300}
-              priority // ✅ améliore le LCP si l'image est visible dès le chargement
-              className="rounded h-auto" // ✅ maintient le ratio de l’image
+              priority
+              className="rounded h-auto"
             />
           )}
-
           <div
             {...getRootProps()}
             className="mt-4 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded"
@@ -204,7 +193,6 @@ export default function SettingsPageAccueil() {
           placeholder="Titre"
           className="w-full p-2 border rounded text-sm"
         />
-
         {form.aboutParagraphs.map((p, idx) => (
           <div key={idx} className="flex gap-2">
             <textarea
@@ -221,7 +209,6 @@ export default function SettingsPageAccueil() {
             </button>
           </div>
         ))}
-
         <button onClick={addParagraph} className="mt-2 text-sm text-[#009992]">
           + Ajouter un paragraphe
         </button>

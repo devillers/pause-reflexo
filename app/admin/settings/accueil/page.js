@@ -22,37 +22,42 @@ export default function SettingsPageAccueil() {
     aboutParagraphs: [],
   });
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const res = await fetch("/api/admin/accueil-data");
-        if (!res.ok) throw new Error(`Erreur ${res.status}`);
-        const doc = await res.json();
+useEffect(() => {
+  async function loadData() {
+    try {
+      const res = await fetch("/api/admin/accueil-data");
+      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+      const doc = await res.json();
 
-        setData(doc);
-        setForm({
-          heroTitleLine1: doc.heroTitleLine1 || "",
-          heroTitleLine2: doc.heroTitleLine2 || "",
-          heroTitleLine3: doc.heroTitleLine3 || "",
-          heroTitleLine4: doc.heroTitleLine4 || "",
-          heroTitleLine5: doc.heroTitleLine5 || "",
-          soinsTitle: doc.soinsSection?.title || "",
-          soinsSubtitle: doc.soinsSection?.subtitle || "",
-          soinsTagline: doc.soinsSection?.tagline || "",
-          aboutTitle: doc.aboutSection?.title || "",
-          aboutParagraphs: Array.isArray(doc.aboutSection?.paragraphs)
+      console.log("[PROD] Données reçues de /accueil-data :", doc);
+
+      setData(doc);
+      setForm({
+        heroTitleLine1: doc.heroTitleLine1 || "",
+        heroTitleLine2: doc.heroTitleLine2 || "",
+        heroTitleLine3: doc.heroTitleLine3 || "",
+        heroTitleLine4: doc.heroTitleLine4 || "",
+        heroTitleLine5: doc.heroTitleLine5 || "",
+        soinsTitle: doc.soinsSection?.title || "",
+        soinsSubtitle: doc.soinsSection?.subtitle || "",
+        soinsTagline: doc.soinsSection?.tagline || "",
+        aboutTitle: doc.aboutSection?.title || "",
+        aboutParagraphs:
+          doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
             ? doc.aboutSection.paragraphs
             : [],
-        });
-        setHeroImagePreview(doc.heroImageUrl);
-      } catch (error) {
-        console.error("Erreur chargement accueil:", error);
-        setData(null); // Pour éviter que le .map se lance
-      }
-    }
-    loadData();
-  }, []);
+      });
 
+      setHeroImagePreview(doc.heroImageUrl || "");
+    } catch (error) {
+      console.error("❌ Erreur chargement accueil:", error);
+      setData(null); // bloque le rendu pour éviter .map sur null
+    }
+  }
+
+  loadData();
+}, []);
+s
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },
     onDrop: (acceptedFiles) => {

@@ -22,26 +22,29 @@ export default function SettingsPageAccueil() {
     aboutParagraphs: [],
   });
 
-  useEffect(() => {
-    fetch("/api/admin/accueil-data")
-      .then((res) => res.json())
-      .then((doc) => {
-        setData(doc);
-        setForm({
-          heroTitleLine1: doc.heroTitleLine1 || "",
-          heroTitleLine2: doc.heroTitleLine2 || "",
-          heroTitleLine3: doc.heroTitleLine3 || "",
-          heroTitleLine4: doc.heroTitleLine4 || "",
-          heroTitleLine5: doc.heroTitleLine5 || "",
-          soinsTitle: doc.soinsSection?.title || "",
-          soinsSubtitle: doc.soinsSection?.subtitle || "",
-          soinsTagline: doc.soinsSection?.tagline || "",
-          aboutTitle: doc.aboutSection?.title || "",
-          aboutParagraphs: doc.aboutSection?.paragraphs || [],
-        });
-        setHeroImagePreview(doc.heroImageUrl);
+useEffect(() => {
+  fetch("/api/admin/accueil-data")
+    .then((res) => res.json())
+    .then((doc) => {
+      setData(doc);
+      setForm({
+        heroTitleLine1: doc.heroTitleLine1 || "",
+        heroTitleLine2: doc.heroTitleLine2 || "",
+        heroTitleLine3: doc.heroTitleLine3 || "",
+        heroTitleLine4: doc.heroTitleLine4 || "",
+        heroTitleLine5: doc.heroTitleLine5 || "",
+        soinsTitle: doc.soinsSection?.title || "",
+        soinsSubtitle: doc.soinsSection?.subtitle || "",
+        soinsTagline: doc.soinsSection?.tagline || "",
+        aboutTitle: doc.aboutSection?.title || "",
+        aboutParagraphs: Array.isArray(doc.aboutSection?.paragraphs)
+          ? doc.aboutSection.paragraphs
+          : [],
       });
-  }, []);
+      setHeroImagePreview(doc.heroImageUrl);
+    });
+}, []);
+
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },

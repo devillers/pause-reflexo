@@ -33,7 +33,6 @@
 // }
 
 
-import './globals.css';
 
 export const metadata = {
   title: 'Pause Réflexo',

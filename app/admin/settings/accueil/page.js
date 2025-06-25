@@ -25,7 +25,9 @@ export default function SettingsPageAccueil() {
 useEffect(() => {
   async function loadData() {
     try {
-      const res = await fetch("/api/admin/accueil-data");
+      const res = await fetch("/api/admin/accueil-data", {
+        cache: "no-store",
+      });
       if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
       const doc = await res.json();
 

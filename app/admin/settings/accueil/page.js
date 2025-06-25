@@ -1,4 +1,7 @@
+//app/admin/settings/accueil/page.js
 "use client";
+
+export const dynamic = 'force-dynamic';      // or: export const revalidate = 0
 
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";

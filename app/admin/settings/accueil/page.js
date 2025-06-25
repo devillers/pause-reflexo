@@ -74,24 +74,29 @@ useEffect(() => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    const body = new FormData();
-    for (const key in form) {
-      if (Array.isArray(form[key])) {
-        form[key].forEach((val, i) => body.append(`${key}[${i}]`, val));
-      } else {
-        body.append(key, form[key]);
-      }
+const handleSubmit = async () => {
+  const body = new FormData();
+  for (const key in form) {
+    if (Array.isArray(form[key])) {
+      form[key].forEach((val, i) => body.append(`${key}[${i}]`, val));
+    } else {
+      body.append(key, form[key]);
     }
+  }
 
-    const res = await fetch("/api/admin/update-accueil", {
-      method: "POST",
-      body,
-    });
+  const res = await fetch("/api/admin/update-accueil", {
+    method: "POST",
+    body,
+  });
 
-    if (res.ok) alert("✅ Données mises à jour !");
-    else alert("❌ Erreur lors de la mise à jour.");
-  };
+  if (res.ok) {
+    alert("✅ Données mises à jour !");
+    // Recharge les données depuis le backend pour être certain que le front est bien aligné
+    await loadData();
+  } else {
+    alert("❌ Erreur lors de la mise à jour.");
+  }
+};
 
   const addParagraph = () => {
     setForm((prev) => ({

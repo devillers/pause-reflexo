@@ -88,18 +88,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* <div>
-          <h3 className="font-bold text-[12px]">Zones que nous desservons</h3>
-          <ul className="text-[10px] text-gray-600 space-y-2 mt-2">
-            <li>Argentière - 74400</li>
-            <li>Chamonix - 74400</li>
-            <li>Les Houches - 74310</li>
-            <li>Saint Gervais les Bains - 74170</li>
-            <li>Combloux - 74920</li>
-            <li>Megève - 74120</li>
-            <li>Sallanches - 74700</li>
-          </ul>
-        </div> */}
+     
       </div>
     </footer>
   );

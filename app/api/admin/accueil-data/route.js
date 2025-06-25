@@ -1,3 +1,5 @@
+// app/api/admin/accueil-data/route.js
+
 import { NextResponse } from "next/server";
 import { connectDb } from "../../../../lib/db.mjs";
 import AccueilWeb from "../../../../models/Accueil-web.mjs";
@@ -5,6 +7,7 @@ import AccueilWeb from "../../../../models/Accueil-web.mjs";
 export const dynamic = "force-dynamic";
 
 function normalizeAccueil(doc) {
+  // doc peut être null !
   return {
     heroTitleLine1: doc?.heroTitleLine1 || "",
     heroTitleLine2: doc?.heroTitleLine2 || "",
@@ -12,18 +15,11 @@ function normalizeAccueil(doc) {
     heroTitleLine4: doc?.heroTitleLine4 || "",
     heroTitleLine5: doc?.heroTitleLine5 || "",
     heroImageUrl: doc?.heroImageUrl || "",
-    soinsSection: {
-      title: doc?.soinsSection?.title || "",
-      subtitle: doc?.soinsSection?.subtitle || "",
-      tagline: doc?.soinsSection?.tagline || "",
-    },
-    aboutSection: {
-      title: doc?.aboutSection?.title || "",
-      paragraphs: Array.isArray(doc?.aboutSection?.paragraphs)
-        ? doc.aboutSection.paragraphs
-        : [],
-    },
-    // Ajoute d'autres champs si tu en ajoutes plus tard
+    subTitle1: doc?.subTitle1 || "",
+    subTitle2: doc?.subTitle2 || "",
+    subTitle3: doc?.subTitle3 || "",
+    aboutTitle: doc?.aboutTitle || "",
+    aboutParagraphs: Array.isArray(doc?.aboutParagraphs) ? doc.aboutParagraphs : [],
   };
 }
 
@@ -32,7 +28,7 @@ export async function GET() {
     await connectDb();
     const doc = await AccueilWeb.findOne().lean();
 
-    // Toujours retourner une structure garantie
+    // Toujours retourner la structure à plat selon le modèle
     return NextResponse.json(normalizeAccueil(doc));
   } catch (err) {
     console.error("Erreur API Accueil:", err);

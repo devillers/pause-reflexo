@@ -1,14 +1,12 @@
-
 // app/page.js
 import { connectDb } from '../lib/db.mjs';
-import AccueilWeb    from '../models/Accueil-web.mjs';
-import HeroHeader    from './components/HeroHeader';
+import AccueilWeb from '../models/Accueil-web.mjs';
+import HeroHeader from './components/HeroHeader';
 
 export default async function Home() {
-  // Connexion à la BDD
   await connectDb();
 
-  // Récupération de la configuration
+  // Récupération de la config unique
   const settings = await AccueilWeb.findOne().lean();
 
   if (!settings) {
@@ -26,8 +24,11 @@ export default async function Home() {
     heroTitleLine4,
     heroTitleLine5,
     heroImageUrl,
-    soinsSection,
-    aboutSection
+    subTitle1,
+    subTitle2,
+    subTitle3,
+    aboutTitle,
+    aboutParagraphs
   } = settings;
 
   return (
@@ -39,7 +40,7 @@ export default async function Home() {
           heroTitleLine2,
           heroTitleLine3,
           heroTitleLine4,
-          heroTitleLine5
+          heroTitleLine5,
         ]}
         imageUrl={heroImageUrl}
       />
@@ -50,17 +51,17 @@ export default async function Home() {
           <ul className="py-4">
             <li>
               <h3 className="text-center text-5xl uppercase font-thin">
-                {soinsSection.title}
+                {subTitle1}
               </h3>
             </li>
             <li>
               <h2 className="text-center text-xl my-4 uppercase font-thin text-[#006778]">
-                {soinsSection.subtitle}
+                {subTitle2}
               </h2>
             </li>
             <li>
               <h4 className="text-center my-4 uppercase font-thin">
-                {soinsSection.tagline}
+                {subTitle3}
               </h4>
             </li>
           </ul>
@@ -70,9 +71,9 @@ export default async function Home() {
       {/* Section “Qui suis-je ?” */}
       <section className="max-w-4xl mx-auto p-6">
         <h2 className="text-2xl font-thin mb-6">
-          {aboutSection.title}
+          {aboutTitle}
         </h2>
-        {aboutSection.paragraphs.map((p, i) => (
+        {aboutParagraphs.map((p, i) => (
           <p key={i} className="text-gray-700 mb-6 text-justify text-sm leading-7">
             {p}
           </p>
@@ -81,4 +82,3 @@ export default async function Home() {
     </main>
   );
 }
-

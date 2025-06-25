@@ -1,7 +1,8 @@
 //app/admin/settings/accueil/page.js
+
 "use client";
 
-export const dynamic = 'force-dynamic';      // or: export const revalidate = 0
+export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -10,53 +11,55 @@ import Image from "next/image";
 export default function SettingsPageAccueil() {
   const [data, setData] = useState(null);
   const [heroImagePreview, setHeroImagePreview] = useState(null);
+
+  // Les clés EXACTES du modèle mongoose
   const [form, setForm] = useState({
     heroTitleLine1: "",
     heroTitleLine2: "",
     heroTitleLine3: "",
     heroTitleLine4: "",
     heroTitleLine5: "",
-    soinsTitle: "",
-    soinsSubtitle: "",
-    soinsTagline: "",
+    heroImageUrl: "",
+    subTitle1: "",
+    subTitle2: "",
+    subTitle3: "",
     aboutTitle: "",
     aboutParagraphs: [],
   });
 
-  // 👇 définie EN DEHORS du useEffect pour pouvoir être rappelée partout
- const loadData = async () => {
-  try {
-    const res = await fetch("/api/admin/accueil-data", { cache: "no-store" });
-    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-    const doc = await res.json();
-    setData(doc);
-    setForm({
-      heroTitleLine1: doc.heroTitleLine1 || "",
-      heroTitleLine2: doc.heroTitleLine2 || "",
-      heroTitleLine3: doc.heroTitleLine3 || "",
-      heroTitleLine4: doc.heroTitleLine4 || "",
-      heroTitleLine5: doc.heroTitleLine5 || "",
-      soinsTitle: doc.soinsSection?.title || "",
-      soinsSubtitle: doc.soinsSection?.subtitle || "",
-      soinsTagline: doc.soinsSection?.tagline || "",
-      aboutTitle: doc.aboutSection?.title || "",
-      aboutParagraphs:
-        doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
-          ? doc.aboutSection.paragraphs
-          : [],
-    });
-    setHeroImagePreview(doc.heroImageUrl || "");
-  } catch (error) {
-    console.error("❌ Erreur chargement accueil:", error);
-    setData(null);
-  }
-};
+  // ----- Chargement depuis l'API -----
+  const loadData = async () => {
+    try {
+      const res = await fetch("/api/admin/accueil-data", { cache: "no-store" });
+      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+      const doc = await res.json();
 
+      setData(doc);
+      setForm({
+        heroTitleLine1: doc.heroTitleLine1 || "",
+        heroTitleLine2: doc.heroTitleLine2 || "",
+        heroTitleLine3: doc.heroTitleLine3 || "",
+        heroTitleLine4: doc.heroTitleLine4 || "",
+        heroTitleLine5: doc.heroTitleLine5 || "",
+        heroImageUrl: doc.heroImageUrl || "",
+        subTitle1: doc.subTitle1 || "",
+        subTitle2: doc.subTitle2 || "",
+        subTitle3: doc.subTitle3 || "",
+        aboutTitle: doc.aboutTitle || "",
+        aboutParagraphs: Array.isArray(doc.aboutParagraphs) ? doc.aboutParagraphs : [],
+      });
+      setHeroImagePreview(doc.heroImageUrl || "");
+    } catch (error) {
+      console.error("❌ Erreur chargement accueil:", error);
+      setData(null);
+    }
+  };
 
   useEffect(() => {
     loadData();
   }, []);
 
+  // ----- Dropzone -----
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },
     onDrop: (acceptedFiles) => {
@@ -66,6 +69,7 @@ export default function SettingsPageAccueil() {
     },
   });
 
+  // ----- Handlers -----
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -88,7 +92,7 @@ export default function SettingsPageAccueil() {
 
     if (res.ok) {
       alert("✅ Données mises à jour !");
-      await loadData(); // 👈 recharge bien le backend à jour
+      await loadData();
     } else {
       alert("❌ Erreur lors de la mise à jour.");
     }
@@ -117,6 +121,7 @@ export default function SettingsPageAccueil() {
   if (data === null)
     return <p className="p-6 text-red-500">❌ chargement en cours</p>;
 
+  // ---------- Rendu ----------
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold">Modifier l'accueil</h1>
@@ -158,35 +163,35 @@ export default function SettingsPageAccueil() {
         </div>
       </div>
 
-      {/* Section Soins */}
+      {/* Section Sous-titres */}
       <section className="bg-white rounded p-4 shadow space-y-2">
-        <h2 className="text-lg font-semibold mb-2">Section Soins</h2>
+        <h2 className="text-lg font-semibold mb-2">Sous-titres</h2>
         <input
-          name="soinsTitle"
-          value={form.soinsTitle}
+          name="subTitle1"
+          value={form.subTitle1}
           onChange={handleChange}
-          placeholder="Titre"
+          placeholder="Sous-titre 1"
           className="w-full p-2 border rounded text-sm"
         />
         <input
-          name="soinsSubtitle"
-          value={form.soinsSubtitle}
+          name="subTitle2"
+          value={form.subTitle2}
           onChange={handleChange}
-          placeholder="Sous-titre"
+          placeholder="Sous-titre 2"
           className="w-full p-2 border rounded text-sm"
         />
         <input
-          name="soinsTagline"
-          value={form.soinsTagline}
+          name="subTitle3"
+          value={form.subTitle3}
           onChange={handleChange}
-          placeholder="Tagline"
+          placeholder="Sous-titre 3"
           className="w-full p-2 border rounded text-sm"
         />
       </section>
 
       {/* Section Qui suis-je */}
       <section className="bg-white rounded p-4 shadow space-y-2">
-        <h2 className="text-lg font-semibold mb-2">Qui suis-je ?</h2>
+        <h2 className="text-lg font-semibold mb-2">Présentation</h2>
         <input
           name="aboutTitle"
           value={form.aboutTitle}

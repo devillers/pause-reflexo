@@ -1,75 +1,42 @@
-//app/api/admin/update-accueil/route.js
+// scripts/seedSettings.mjs
+import { connectDb } from '../../../../lib/db.mjs';
+import AccueilWeb from '../../../../models/Accueil-web.mjs';
 
-import { NextResponse } from "next/server";
-import AccueilWeb from "../../../../models/Accueil-web.mjs";
-import { connectDb } from "../../../../lib/db.mjs";
-import { mkdir, writeFile } from "fs/promises";
-import { existsSync } from "fs";
-import path from "path";
+async function seed() {
+  await connectDb();
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
-export const config = {
-  api: { bodyParser: false },
-};
+  // Supprime l’ancienne config
+  await AccueilWeb.deleteMany({});
 
-export async function POST(req) {
-  try {
-    await connectDb();
+  // Crée la nouvelle config conforme au schéma
+  await AccueilWeb.create({
+    // HeroHeader – 5 lignes
+    heroTitleLine1: 'Praticienne',
+    heroTitleLine2: 'réflexologie',
+    heroTitleLine3: '& Shiatsu assis',
+    heroTitleLine4: 'au pays du',
+    heroTitleLine5: 'Mont-Blanc',
+    heroImageUrl:   '/images/header.webp',
 
-    const formData = await req.formData();
+    // Section sous-titre : 3 champs à plat (ex "soinsSection" → subTitle1/2/3)
+    subTitle1: 'présentation de nos soins',
+    subTitle2: 'réflexologie – shiatsu – massages',
+    subTitle3: 'une approche globale du bien-être',
 
-    const updates = {
-      heroTitleLine1: formData.get("heroTitleLine1") || "",
-      heroTitleLine2: formData.get("heroTitleLine2") || "",
-      heroTitleLine3: formData.get("heroTitleLine3") || "",
-      heroTitleLine4: formData.get("heroTitleLine4") || "",
-      heroTitleLine5: formData.get("heroTitleLine5") || "",
-      soinsSection: {
-        title: formData.get("soinsTitle") || "",
-        subtitle: formData.get("soinsSubtitle") || "",
-        tagline: formData.get("soinsTagline") || "",
-      },
-      aboutSection: {
-        title: formData.get("aboutTitle") || "",
-        paragraphs: [],
-      },
-    };
+    // Section présentation (qui suis-je)
+    aboutTitle: 'Qui suis-je ?',
+    aboutParagraphs: [
+      'Bonjour et bienvenue, Je m’appelle Cécile, amoureuse de ma région et installée à Saint-Nicolas-de-Véroce, au cœur des montagnes qui inspirent mes pratiques. Guidée par une profonde curiosité et riche de plusieurs expériences professionnelles, j’ai trouvé ma vocation : accompagner chacun vers plus de bien-être et de sérénité.',
+      'Certifiée en réflexologie plantaire, palmaire, ventrale et crânienne, ainsi qu’en shiatsu assis, je vous propose des séances personnalisées pour soulager le stress, les tensions et la fatigue. À l’image du colibri, je crois que chaque geste compte pour ramener plus d’équilibre dans votre quotidien. Formée au Centre Réflexo Naturel de La Roche-sur-Foron et forte de cinq années d’expérience comme assistante de vie, je suis particulièrement attentive aux besoins des personnes âgées et de leurs proches.',
+      'J’interviens à domicile, en entreprise dans le cadre du bien-être au travail, en EHPAD et en résidences seniors, auprès des résidents comme du personnel. À partir de septembre 2025, je vous accueillerai également en cabinet. Je me déplace dans tout le Val Montjoie, le Val d’Arly, le Pays du Mont-Blanc et la Vallée de l’Arve. Offrez-vous un moment de détente… ou faites-en cadeau à ceux que vous aimez ! Contactez-moi pour réserver votre séance.'
+    ],
+  });
 
-    // Collecter les paragraphes dynamiques
-    let i = 0;
-    while (formData.has(`aboutParagraphs[${i}]`)) {
-      const val = formData.get(`aboutParagraphs[${i}]`);
-      if (val) updates.aboutSection.paragraphs.push(val);
-      i++;
-    }
-
-    // Gérer l'image uploadée
-    const file = formData.get("newHeroImage");
-    if (file && typeof file === "object" && file.size > 0) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const fileName = `hero-${Date.now()}.webp`;
-      const uploadsDir = path.join(process.cwd(), "public", "uploads");
-
-      if (!existsSync(uploadsDir)) {
-        await mkdir(uploadsDir, { recursive: true });
-      }
-
-      const filePath = path.join(uploadsDir, fileName);
-      await writeFile(filePath, buffer);
-      updates.heroImageUrl = `/uploads/${fileName}`;
-    }
-
-    // Enregistrement (update ou create)
-    await AccueilWeb.findOneAndUpdate({}, updates, {
-      new: true,
-      upsert: true,
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error("❌ Erreur update accueil :", err);
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
-  }
+  console.log('✅ Accueil-web seed done');
+  process.exit(0);
 }
+
+seed().catch(err => {
+  console.error(err);
+  process.exit(1);
+});

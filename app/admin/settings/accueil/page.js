@@ -111,7 +111,7 @@ useEffect(() => {
     setForm((prev) => ({ ...prev, aboutParagraphs: updated }));
   };
 
-if (data === null) return <p className="p-6 text-red-500">❌ Erreur de chargement des données</p>;
+if (data === null) return <p className="p-6 text-red-500">❌ chargement en cours</p>;
 
 
   return (

@@ -1,3 +1,5 @@
+//app/data/menuitems.js
+
 import { FiPhone } from "react-icons/fi";
 
 const menuItems = [

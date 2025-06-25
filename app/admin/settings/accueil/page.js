@@ -24,36 +24,34 @@ export default function SettingsPageAccueil() {
   });
 
   // 👇 définie EN DEHORS du useEffect pour pouvoir être rappelée partout
-  const loadData = async () => {
-    try {
-      const res = await fetch(
-        "https://pausereflexo.fr/api/admin/accueil-data",
-        { cache: "no-store" }
-      );
-      if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
-      const doc = await res.json();
-      setData(doc);
-      setForm({
-        heroTitleLine1: doc.heroTitleLine1 || "",
-        heroTitleLine2: doc.heroTitleLine2 || "",
-        heroTitleLine3: doc.heroTitleLine3 || "",
-        heroTitleLine4: doc.heroTitleLine4 || "",
-        heroTitleLine5: doc.heroTitleLine5 || "",
-        soinsTitle: doc.soinsSection?.title || "",
-        soinsSubtitle: doc.soinsSection?.subtitle || "",
-        soinsTagline: doc.soinsSection?.tagline || "",
-        aboutTitle: doc.aboutSection?.title || "",
-        aboutParagraphs:
-          doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
-            ? doc.aboutSection.paragraphs
-            : [],
-      });
-      setHeroImagePreview(doc.heroImageUrl || "");
-    } catch (error) {
-      console.error("❌ Erreur chargement accueil:", error);
-      setData(null); // bloque le rendu pour éviter .map sur null
-    }
-  };
+ const loadData = async () => {
+  try {
+    const res = await fetch("/api/admin/accueil-data", { cache: "no-store" });
+    if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
+    const doc = await res.json();
+    setData(doc);
+    setForm({
+      heroTitleLine1: doc.heroTitleLine1 || "",
+      heroTitleLine2: doc.heroTitleLine2 || "",
+      heroTitleLine3: doc.heroTitleLine3 || "",
+      heroTitleLine4: doc.heroTitleLine4 || "",
+      heroTitleLine5: doc.heroTitleLine5 || "",
+      soinsTitle: doc.soinsSection?.title || "",
+      soinsSubtitle: doc.soinsSection?.subtitle || "",
+      soinsTagline: doc.soinsSection?.tagline || "",
+      aboutTitle: doc.aboutSection?.title || "",
+      aboutParagraphs:
+        doc.aboutSection && Array.isArray(doc.aboutSection.paragraphs)
+          ? doc.aboutSection.paragraphs
+          : [],
+    });
+    setHeroImagePreview(doc.heroImageUrl || "");
+  } catch (error) {
+    console.error("❌ Erreur chargement accueil:", error);
+    setData(null);
+  }
+};
+
 
   useEffect(() => {
     loadData();

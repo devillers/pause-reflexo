@@ -13,7 +13,16 @@ export async function GET() {
     const doc = await AccueilWeb.findOne().lean();
 
     if (!doc) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json({
+        heroTitleLine1: "",
+        heroTitleLine2: "",
+        heroTitleLine3: "",
+        heroTitleLine4: "",
+        heroTitleLine5: "",
+        heroImageUrl: "",
+        soinsSection: { title: "", subtitle: "", tagline: "" },
+        aboutSection: { title: "", paragraphs: [] },
+      }, { status: 200 });
     }
 
     return NextResponse.json(doc);

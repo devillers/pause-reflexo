@@ -22,29 +22,36 @@ export default function SettingsPageAccueil() {
     aboutParagraphs: [],
   });
 
-useEffect(() => {
-  fetch("/api/admin/accueil-data")
-    .then((res) => res.json())
-    .then((doc) => {
-      setData(doc);
-      setForm({
-        heroTitleLine1: doc.heroTitleLine1 || "",
-        heroTitleLine2: doc.heroTitleLine2 || "",
-        heroTitleLine3: doc.heroTitleLine3 || "",
-        heroTitleLine4: doc.heroTitleLine4 || "",
-        heroTitleLine5: doc.heroTitleLine5 || "",
-        soinsTitle: doc.soinsSection?.title || "",
-        soinsSubtitle: doc.soinsSection?.subtitle || "",
-        soinsTagline: doc.soinsSection?.tagline || "",
-        aboutTitle: doc.aboutSection?.title || "",
-        aboutParagraphs: Array.isArray(doc.aboutSection?.paragraphs)
-          ? doc.aboutSection.paragraphs
-          : [],
-      });
-      setHeroImagePreview(doc.heroImageUrl);
-    });
-}, []);
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const res = await fetch("/api/admin/accueil-data");
+        if (!res.ok) throw new Error(`Erreur ${res.status}`);
+        const doc = await res.json();
 
+        setData(doc);
+        setForm({
+          heroTitleLine1: doc.heroTitleLine1 || "",
+          heroTitleLine2: doc.heroTitleLine2 || "",
+          heroTitleLine3: doc.heroTitleLine3 || "",
+          heroTitleLine4: doc.heroTitleLine4 || "",
+          heroTitleLine5: doc.heroTitleLine5 || "",
+          soinsTitle: doc.soinsSection?.title || "",
+          soinsSubtitle: doc.soinsSection?.subtitle || "",
+          soinsTagline: doc.soinsSection?.tagline || "",
+          aboutTitle: doc.aboutSection?.title || "",
+          aboutParagraphs: Array.isArray(doc.aboutSection?.paragraphs)
+            ? doc.aboutSection.paragraphs
+            : [],
+        });
+        setHeroImagePreview(doc.heroImageUrl);
+      } catch (error) {
+        console.error("Erreur chargement accueil:", error);
+        setData(null); // Pour éviter que le .map se lance
+      }
+    }
+    loadData();
+  }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },
@@ -99,7 +106,8 @@ useEffect(() => {
     setForm((prev) => ({ ...prev, aboutParagraphs: updated }));
   };
 
-  if (!data) return <p className="p-6">Chargement…</p>;
+if (data === null) return <p className="p-6 text-red-500">❌ Erreur de chargement des données</p>;
+
 
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">

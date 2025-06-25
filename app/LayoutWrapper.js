@@ -12,23 +12,15 @@ import { useLayout } from './LayoutContext';
 
 export default function LayoutWrapper({ children }) {
   const { hideLayout } = useLayout();
+  const pathname = usePathname(); // ✅ plus fiable que window.location.pathname
 
-  const [isClient, setIsClient] = useState(false);
-  const [pathname, setPathname] = useState('');
-
-  useEffect(() => {
-    setIsClient(true);
-    setPathname(window.location.pathname);
-  }, []);
-
-  const isAdmin = pathname.startsWith('/admin');
+  const isAdmin = pathname?.startsWith('/admin');
   const isSignin = pathname === '/auth/signin';
   const isContact = pathname === '/contact';
-  const isSoins = pathname.startsWith('/soins');
+  const isSoins = pathname?.startsWith('/soins');
 
   return (
     <>
-      {/* Google Analytics */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-FER4ECWWK3"
         strategy="afterInteractive"
@@ -43,13 +35,11 @@ export default function LayoutWrapper({ children }) {
         `}
       </Script>
 
-      {/* Layout */}
       {!isAdmin && !isSignin && !hideLayout && <Header />}
       <main>{children}</main>
       {!isAdmin && !isSignin && !hideLayout && <Footer />}
       {!isAdmin && !isSignin && !isContact && !isSoins && !hideLayout && <FloatingContact />}
 
-      {/* Cookies */}
       {!isAdmin && !isSignin && (
         <CookieConsent
           disableStyles

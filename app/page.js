@@ -1,13 +1,13 @@
 // app/page.js
 import { connectDb } from '../lib/db.mjs';
-import AccueilWeb from '../models/Accueil-web.mjs';
+import Settings from '../models/Settings.mjs';
 import HeroHeader from './components/HeroHeader';
 
 export default async function Home() {
   await connectDb();
 
   // Récupération de la config unique
-  const settings = await AccueilWeb.findOne().lean();
+  const settings = await Settings.findOne().lean();
 
   if (!settings) {
     return (

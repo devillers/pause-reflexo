@@ -1,13 +1,12 @@
-// app/api/admin/accueil-data/route.js
+// app/api/admin/accueil/post/route.js
 
 import { NextResponse } from "next/server";
-import { connectDb } from "../../../../lib/db.mjs";
-import AccueilWeb from "../../../../models/Accueil-web.mjs";
+import { connectDb } from "../../../../../lib/db.mjs";
+import Settings from "../../../../../models/Settings.mjs";
 
 export const dynamic = "force-dynamic";
 
 function normalizeAccueil(doc) {
-  // doc peut être null !
   return {
     heroTitleLine1: doc?.heroTitleLine1 || "",
     heroTitleLine2: doc?.heroTitleLine2 || "",
@@ -23,15 +22,27 @@ function normalizeAccueil(doc) {
   };
 }
 
-export async function GET() {
+export async function POST(req) {
   try {
     await connectDb();
-    const doc = await AccueilWeb.findOne().lean();
+    const body = await req.json();
 
-    // Toujours retourner la structure à plat selon le modèle
+    // Singleton par section !
+    const existing = await Settings.findOne({ section: "accueil" });
+    if (existing) {
+      return NextResponse.json(
+        { error: "Accueil (section) existe déjà, impossible d'en créer un second." },
+        { status: 400 }
+      );
+    }
+
+    // On force bien la section pour ne pas risquer d’erreur côté client
+    const doc = new Settings({ ...body, section: "accueil" });
+    await doc.save();
+
     return NextResponse.json(normalizeAccueil(doc));
   } catch (err) {
-    console.error("Erreur API Accueil:", err);
+    console.error("Erreur POST Accueil:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

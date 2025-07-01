@@ -1,8 +1,7 @@
-//app/admin/settings/accueil/page.js
+// app/admin/settings/accueil/page.js
 
 "use client";
-
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -11,6 +10,8 @@ import Image from "next/image";
 export default function SettingsPageAccueil() {
   const [data, setData] = useState(null);
   const [heroImagePreview, setHeroImagePreview] = useState(null);
+  const [exists, setExists] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // Les clés EXACTES du modèle mongoose
   const [form, setForm] = useState({
@@ -29,8 +30,9 @@ export default function SettingsPageAccueil() {
 
   // ----- Chargement depuis l'API -----
   const loadData = async () => {
+    setLoading(true);
     try {
-      const res = await fetch("/api/admin/accueil-data", { cache: "no-store" });
+      const res = await fetch("/api/admin/accueil/get", { cache: "no-store" });
       if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`);
       const doc = await res.json();
 
@@ -46,13 +48,17 @@ export default function SettingsPageAccueil() {
         subTitle2: doc.subTitle2 || "",
         subTitle3: doc.subTitle3 || "",
         aboutTitle: doc.aboutTitle || "",
-        aboutParagraphs: Array.isArray(doc.aboutParagraphs) ? doc.aboutParagraphs : [],
+        aboutParagraphs: Array.isArray(doc.aboutParagraphs)
+          ? doc.aboutParagraphs
+          : [],
       });
       setHeroImagePreview(doc.heroImageUrl || "");
+      setExists(true);
     } catch (error) {
-      console.error("❌ Erreur chargement accueil:", error);
+      setExists(false);
       setData(null);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -60,12 +66,30 @@ export default function SettingsPageAccueil() {
   }, []);
 
   // ----- Dropzone -----
+  const handleImageUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/uploadCloudinary", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (res.ok) {
+      const { url } = await res.json();
+      setForm((prev) => ({ ...prev, heroImageUrl: url }));
+      setHeroImagePreview(url);
+    } else {
+      alert("Erreur upload image");
+    }
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: { "image/*": [] },
-    onDrop: (acceptedFiles) => {
+    onDrop: async (acceptedFiles) => {
       const file = acceptedFiles[0];
-      setHeroImagePreview(URL.createObjectURL(file));
-      setForm((prev) => ({ ...prev, newHeroImage: file }));
+      if (!file) return;
+      await handleImageUpload(file);
     },
   });
 
@@ -76,25 +100,22 @@ export default function SettingsPageAccueil() {
   };
 
   const handleSubmit = async () => {
-    const body = new FormData();
-    for (const key in form) {
-      if (Array.isArray(form[key])) {
-        form[key].forEach((val, i) => body.append(`${key}[${i}]`, val));
-      } else {
-        body.append(key, form[key]);
-      }
-    }
+    const payload = { ...form, section: "accueil" };
+    const url = exists
+      ? "/api/admin/accueil/update"
+      : "/api/admin/accueil/post";
 
-    const res = await fetch("/api/admin/update-accueil", {
+    const res = await fetch(url, {
       method: "POST",
-      body,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
 
     if (res.ok) {
-      alert("✅ Données mises à jour !");
+      alert("✅ Données sauvegardées !");
       await loadData();
     } else {
-      alert("❌ Erreur lors de la mise à jour.");
+      alert("❌ Erreur lors de la sauvegarde.");
     }
   };
 
@@ -118,13 +139,15 @@ export default function SettingsPageAccueil() {
     setForm((prev) => ({ ...prev, aboutParagraphs: updated }));
   };
 
-  if (data === null)
-    return <p className="p-6 text-red-500">❌ chargement en cours</p>;
+  if (loading)
+    return <p className="p-6 text-gray-500">Chargement en cours…</p>;
 
   // ---------- Rendu ----------
   return (
     <div className="p-6 space-y-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold">Modifier l'accueil</h1>
+      <h1 className="text-2xl font-bold">
+        {exists ? "Modifier l'accueil" : "Créer la configuration accueil"}
+      </h1>
       {/* Hero Titles */}
       <div className="bg-white rounded p-6 shadow space-y-4">
         <h2 className="font-semibold">Lignes de titre</h2>
@@ -141,16 +164,6 @@ export default function SettingsPageAccueil() {
         {/* Image Hero */}
         <div className="mt-6">
           <h3 className="font-semibold mb-2">Image actuelle</h3>
-          {heroImagePreview && (
-            <Image
-              src={heroImagePreview}
-              alt="Hero"
-              width={600}
-              height={300}
-              priority
-              className="rounded h-auto"
-            />
-          )}
           <div
             {...getRootProps()}
             className="mt-4 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded"
@@ -160,6 +173,19 @@ export default function SettingsPageAccueil() {
               Déposez une nouvelle image ici ou cliquez
             </p>
           </div>
+          {/* Affichage du preview juste en dessous de la dropzone */}
+          {heroImagePreview && (
+            <div className="mt-4 flex justify-center">
+              <Image
+                src={heroImagePreview}
+                alt="Image sélectionnée"
+                width={400}
+                height={200}
+                className="rounded shadow"
+                style={{ objectFit: "contain", maxHeight: 200 }}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -210,12 +236,17 @@ export default function SettingsPageAccueil() {
             <button
               onClick={() => removeParagraph(idx)}
               className="text-red-500 font-bold"
+              type="button"
             >
               X
             </button>
           </div>
         ))}
-        <button onClick={addParagraph} className="mt-2 text-sm text-[#009992]">
+        <button
+          onClick={addParagraph}
+          className="mt-2 text-sm text-[#009992]"
+          type="button"
+        >
           + Ajouter un paragraphe
         </button>
       </section>
@@ -223,8 +254,11 @@ export default function SettingsPageAccueil() {
       <button
         onClick={handleSubmit}
         className="bg-[#009992] text-white px-6 py-2 rounded hover:bg-[#007c78]"
+        type="button"
       >
-        Enregistrer les modifications
+        {exists
+          ? "Enregistrer les modifications"
+          : "Créer la configuration accueil"}
       </button>
     </div>
   );

@@ -13,7 +13,7 @@ export default function SettingsPageAccueil() {
   const [exists, setExists] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  // Les clés EXACTES du modèle mongoose
+  // Champs du modèle
   const [form, setForm] = useState({
     heroTitleLine1: "",
     heroTitleLine2: "",
@@ -28,7 +28,7 @@ export default function SettingsPageAccueil() {
     aboutParagraphs: [],
   });
 
-  // ----- Chargement depuis l'API -----
+  // Récupération de la config existante
   const loadData = async () => {
     setLoading(true);
     try {
@@ -65,12 +65,12 @@ export default function SettingsPageAccueil() {
     loadData();
   }, []);
 
-  // ----- Dropzone -----
+  // Dropzone pour upload image
   const handleImageUpload = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/api/uploadCloudinary", {
+    const res = await fetch("/api/uploadCoudinary", {
       method: "POST",
       body: formData,
     });
@@ -93,13 +93,41 @@ export default function SettingsPageAccueil() {
     },
   });
 
-  // ----- Handlers -----
+  // Handler suppression image
+  const handleDeleteImage = async () => {
+    if (!form.heroImageUrl) return;
+    if (
+      !window.confirm(
+        "Supprimer définitivement l’image ? (cette action est irréversible)"
+      )
+    )
+      return;
+
+    const res = await fetch("/api/uploadCoudinary", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ imageUrl: form.heroImageUrl }),
+    });
+
+    if (res.ok) {
+      setForm((prev) => ({ ...prev, heroImageUrl: "" }));
+      setHeroImagePreview("");
+      // Met à jour la config accueil pour retirer le lien de l'image
+      await handleSubmit({ withoutAlert: true });
+      alert("Image supprimée !");
+    } else {
+      alert("Erreur lors de la suppression de l’image.");
+    }
+  };
+
+  // Champs texte
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
+  // Submit config accueil
+  const handleSubmit = async (opts = {}) => {
     const payload = { ...form, section: "accueil" };
     const url = exists
       ? "/api/admin/accueil/update"
@@ -112,7 +140,7 @@ export default function SettingsPageAccueil() {
     });
 
     if (res.ok) {
-      alert("✅ Données sauvegardées !");
+      if (!opts.withoutAlert) alert("✅ Données sauvegardées !");
       await loadData();
     } else {
       alert("❌ Erreur lors de la sauvegarde.");
@@ -139,8 +167,39 @@ export default function SettingsPageAccueil() {
     setForm((prev) => ({ ...prev, aboutParagraphs: updated }));
   };
 
-  if (loading)
-    return <p className="p-6 text-gray-500">Chargement en cours…</p>;
+  // Reset config accueil
+  const handleReset = async () => {
+    if (
+      !window.confirm(
+        "Cette action va supprimer toute la configuration accueil. Confirmer ?"
+      )
+    )
+      return;
+    const res = await fetch("/api/admin/accueil/delete", { method: "POST" });
+    if (res.ok) {
+      alert("Configuration réinitialisée !");
+      setForm({
+        heroTitleLine1: "",
+        heroTitleLine2: "",
+        heroTitleLine3: "",
+        heroTitleLine4: "",
+        heroTitleLine5: "",
+        heroImageUrl: "",
+        subTitle1: "",
+        subTitle2: "",
+        subTitle3: "",
+        aboutTitle: "",
+        aboutParagraphs: [],
+      });
+      setHeroImagePreview("");
+      setExists(false);
+      await loadData();
+    } else {
+      alert("Erreur lors de la suppression.");
+    }
+  };
+
+  if (loading) return <p className="p-6 text-gray-500">Chargement en cours…</p>;
 
   // ---------- Rendu ----------
   return (
@@ -175,7 +234,7 @@ export default function SettingsPageAccueil() {
           </div>
           {/* Affichage du preview juste en dessous de la dropzone */}
           {heroImagePreview && (
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex flex-col items-center gap-2">
               <Image
                 src={heroImagePreview}
                 alt="Image sélectionnée"
@@ -184,6 +243,13 @@ export default function SettingsPageAccueil() {
                 className="rounded shadow"
                 style={{ objectFit: "contain", maxHeight: 200 }}
               />
+              <button
+                className="text-sm text-red-600 underline mt-2"
+                type="button"
+                onClick={handleDeleteImage}
+              >
+                Supprimer l’image
+              </button>
             </div>
           )}
         </div>
@@ -251,15 +317,24 @@ export default function SettingsPageAccueil() {
         </button>
       </section>
 
-      <button
-        onClick={handleSubmit}
-        className="bg-[#009992] text-white px-6 py-2 rounded hover:bg-[#007c78]"
-        type="button"
-      >
-        {exists
-          ? "Enregistrer les modifications"
-          : "Créer la configuration accueil"}
-      </button>
+      <div className="flex">
+        <button
+          onClick={handleSubmit}
+          className="bg-[#009992] text-white px-6 py-2 rounded hover:bg-[#007c78]"
+          type="button"
+        >
+          {exists
+            ? "Enregistrer les modifications"
+            : "Créer la configuration accueil"}
+        </button>
+        <button
+          onClick={handleReset}
+          className="bg-red-100 text-red-700 px-6 py-2 rounded hover:bg-red-200 border border-red-300 ml-4"
+          type="button"
+        >
+          Réinitialiser (effacer la config)
+        </button>
+      </div>
     </div>
   );
 }

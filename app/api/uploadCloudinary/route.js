@@ -1,3 +1,5 @@
+//app/api/uploadCloudinary/route.js
+
 import cloudinary from "../../../lib/cloudinary.mjs";
 
 export const maxSize = 8 * 1024 * 1024;

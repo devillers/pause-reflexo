@@ -1,4 +1,4 @@
-// app/api/admin/accueil/delete/route.js
+// app/api/admin/delete/route.js
 import { NextResponse } from "next/server";
 import { connectDb } from "../../../../../lib/db.mjs";
 import Settings from "../../../../../models/Settings.mjs";

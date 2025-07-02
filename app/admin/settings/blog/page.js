@@ -51,7 +51,7 @@ export default function SettingsPageBlog() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/api/uploadCoudinary", {
+    const res = await fetch("/api/uploadCloudinary", {
       method: "POST",
       body: formData,
     });

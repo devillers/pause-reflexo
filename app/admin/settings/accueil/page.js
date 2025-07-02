@@ -70,7 +70,7 @@ export default function SettingsPageAccueil() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const res = await fetch("/api/uploadCoudinary", {
+    const res = await fetch("/api/uploadCloudinary", {
       method: "POST",
       body: formData,
     });
@@ -103,7 +103,7 @@ export default function SettingsPageAccueil() {
     )
       return;
 
-    const res = await fetch("/api/uploadCoudinary", {
+    const res = await fetch("/api/uploadCloudinary", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageUrl: form.heroImageUrl }),
@@ -175,7 +175,7 @@ export default function SettingsPageAccueil() {
       )
     )
       return;
-    const res = await fetch("/api/admin/accueil/delete", { method: "POST" });
+    const res = await fetch("/api/admin/delete", { method: "POST" });
     if (res.ok) {
       alert("Configuration réinitialisée !");
       setForm({

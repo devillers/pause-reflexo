@@ -1,7 +1,8 @@
+// components/FullScreenPage.js
 "use client";
 import { motion } from "framer-motion";
 
-export default function FullScreenBgPage() {
+export default function FullScreenPage() { // <--- NOM ! (pas FullScreenBgPage)
   return (
     <div className="min-h-screen min-w-full flex items-center justify-center relative overflow-hidden">
       {/* Vidéo en background */}
@@ -13,11 +14,11 @@ export default function FullScreenBgPage() {
         muted
         playsInline
         preload="auto"
-        poster="/images/zen1.png" // Optionnel
+        poster="/images/zen1.png"
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/40 z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-black/30 z-10 pointer-events-none" />
 
       {/* Contenu centré animé */}
       <motion.div

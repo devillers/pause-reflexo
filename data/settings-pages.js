@@ -1,7 +1,7 @@
 //app/data/settings-pages.js
 
 const settingsPages = [
-  { title: "Accueil", href: "/admin/settings/accueil" },
+  { title: "Test", href: "/admin/settings/test" },
   { title: "Blog", href: "/admin/settings/blog" },
   { title: "Soins", href: "/admin/settings/soins" },
 ];

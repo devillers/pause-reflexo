@@ -15,6 +15,7 @@ import { TbMassage } from "react-icons/tb";
 import { CiBookmark } from "react-icons/ci";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { SiGoogleanalytics } from "react-icons/si";
+import { CiCalculator1 } from "react-icons/ci";
 import {
   FiMenu,
   FiX,
@@ -22,6 +23,7 @@ import {
   FiUsers,
   FiSettings,
   FiLogOut,
+  
 } from "react-icons/fi";
 
 export default function Sidebar() {
@@ -106,6 +108,13 @@ useEffect(() => {
           href="/admin/allPosts"
           open={open}
         />
+         <SidebarLink
+          icon={<CiCalculator1 className="text-[17px]" />}
+          label="Calculator"
+          href="/admin/calculator"
+          open={open}
+        />
+
 
         {isAdmin && (
           <SidebarLink

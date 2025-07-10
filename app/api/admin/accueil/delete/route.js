@@ -1,19 +1,28 @@
-// app/api/admin/delete/route.js
+// app/api/admin/accueil/delete/route.js
+
 import { NextResponse } from "next/server";
 import { connectDb } from "../../../../../lib/db.mjs";
 import Settings from "../../../../../models/Settings.mjs";
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
+export async function POST(req) {
   try {
+    console.log("[DELETE API] Connexion à la base...");
     await connectDb();
-    const deleted = await Settings.findOneAndDelete({ section: "accueil" });
-    if (!deleted) {
-      return NextResponse.json({ error: "Aucun document à supprimer" }, { status: 404 });
+    // On supprime bien la section accueil uniquement !
+    const res = await Settings.deleteOne({ section: "accueil" });
+    console.log("[DELETE API] Résultat suppression:", res);
+
+    if (res.deletedCount > 0) {
+      console.log("[DELETE API] Document supprimé");
+      return NextResponse.json({ success: true });
+    } else {
+      console.log("[DELETE API] Aucun document supprimé");
+      return NextResponse.json({ error: "Aucun document à supprimer." }, { status: 404 });
     }
-    return NextResponse.json({ success: true });
   } catch (err) {
-    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    console.error("[DELETE API] Erreur suppression:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

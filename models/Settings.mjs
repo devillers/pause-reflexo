@@ -21,7 +21,12 @@ const ConfigWebSchema = new mongoose.Schema(
     subTitle2: { type: String, default: "" },
     subTitle3: { type: String, default: "" },
     aboutTitle: { type: String, default: "" },
-    aboutParagraphs: { type: [String], default: [] },
+    aboutParagraphs: [
+  {
+    text: { type: String, default: "" },
+    imageUrl: { type: String, default: "" }, // facultatif
+  }
+],
 
     // Champs pour la section Blog
     blogHeaderImageUrl: { type: String, default: "" },

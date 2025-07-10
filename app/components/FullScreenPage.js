@@ -28,7 +28,7 @@ export default function FullScreenPage() { // <--- NOM ! (pas FullScreenBgPage)
         className="relative z-20 min-h-screen min-w-full flex items-center justify-center"
         style={{ backdropFilter: "blur(2px)", WebkitBackdropFilter: "blur(2px)" }}
       >
-        <p className="font-extrabold text-6xl text-white drop-shadow-lg">
+        <p className="w-full p-6 text-7xl font-extrabold sm:text-8xl uppercase text-white ">
           Test de font sur fond transparent
         </p>
       </motion.div>

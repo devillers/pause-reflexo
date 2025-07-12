@@ -84,7 +84,7 @@ export default function MegaMenu() {
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <a
-            className="text-[40px] lg:text-[30px] italic font-extrabold uppercase text-white hover:text-orange-500"
+            className="text-[30px] lg:text-[20px] italic font-extrabold uppercase text-white hover:text-orange-500"
             href="/"
           >
             Pause Reflexo

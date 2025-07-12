@@ -236,7 +236,7 @@ export default function MegaMenu() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.5 }}
-              className="fixed top-0 right-0 w-2/5 h-full bg-white/30 shadow-lg z-50"
+              className="fixed top-0 right-0 lg:w-2/5 w-3/5 h-full bg-white/30 shadow-lg z-50"
             >
               <div className="flex justify-end p-8">
                 <button onClick={() => setMobileOpen(false)}>

@@ -1,19 +1,18 @@
 //app/data/menuitems.js
 
-import { FiPhone } from "react-icons/fi";
+//import { FiPhone } from "react-icons/fi";
 
 const menuItems = [
   { title: "Accueil", href: "/" },
   {
-    title: "les séances",
-    href: "/soins",
+    title: "nos stages",
+    href: "/nos-stages",
   },
  
   {
-    title: "rdv",
-    href: "https://www.crenolibre.fr/moteur/124911_durindel-cecile",
-    target: "_blank",
-    rel: "noopener noreferrer",
+    title: "réserver",
+    href: "/stages",
+    
   },
 
   {
@@ -21,11 +20,11 @@ const menuItems = [
     href: "/blog",
   },
   { title: "contact", href: "/contact" },
-  {
-    title: "06 09 07 74 38",
-    href: "tel:+33609077438",
-    icon: FiPhone, // ← icône téléphonique ici
-  },
+  // {
+  //   title: "06 09 07 74 38",
+  //   href: "tel:+33609077438",
+  //   icon: FiPhone, // ← icône téléphonique ici
+  // },
 ];
 
 export default menuItems;

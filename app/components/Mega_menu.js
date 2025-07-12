@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import menuItems from '../../data/menuItems';
+import React, { useState, useRef, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import menuItems from "../../data/menuItems";
 
 export default function MegaMenu() {
   const pathname = usePathname();
@@ -20,13 +20,15 @@ export default function MegaMenu() {
 
   const activeSubmenu = menuItems.find((m) => m.title === activeMenu)?.submenu;
   const colCount = activeSubmenu?.length ?? 0;
-  const gridCols = colCount > 5 ? 'grid-cols-5' : `grid-cols-${colCount}`;
+  const gridCols = colCount > 5 ? "grid-cols-5" : `grid-cols-${colCount}`;
 
   const startProgress = () => {
     clearInterval(progressInterval.current);
     setProgress(0);
     progressInterval.current = setInterval(() => {
-      setProgress((p) => (p + Math.random() * 10 < 90 ? p + Math.random() * 10 : 90));
+      setProgress((p) =>
+        p + Math.random() * 10 < 90 ? p + Math.random() * 10 : 90
+      );
     }, 200);
   };
 
@@ -43,6 +45,16 @@ export default function MegaMenu() {
     setTimeout(() => router.push(href), delay);
   };
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10); // >10px = considéré "scrolled"
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     completeProgress();
     setActiveMenu(null);
@@ -50,7 +62,12 @@ export default function MegaMenu() {
   }, [pathname]);
 
   return (
-    <header className="shadow-sm relative z-50">
+   <header
+      className={
+        `fixed top-0 left-0 w-full z-50 transition-colors duration-300 
+        ${scrolled ? 'bg-white/10 shadow-md backdrop-blur' : 'bg-transparent'}`
+      }
+    >
       <AnimatePresence>
         {progress > 0 && (
           <motion.div
@@ -58,32 +75,43 @@ export default function MegaMenu() {
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             exit={{ width: 0 }}
-            transition={{ ease: 'linear', duration: 0.2 }}
-            className="fixed top-0 left-0 h-1 bg-[#009992] z-[100]"
+            transition={{ ease: "linear", duration: 0.2 }}
+            className="fixed top-0 left-0 h-1 bg-red-500 z-[100]"
           />
         )}
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img src="/images/logo.png" alt="Logo" className="h-10 w-auto" />
+          <a
+            className="text-[40px] lg:text-[30px] italic font-extrabold uppercase text-white hover:text-orange-500"
+            href="/"
+          >
+            Pause Reflexo
+          </a>
         </div>
 
-        <div className="hidden md:flex justify-center flex-1">
+        {/* MENU DESKTOP */}
+        <div className="hidden  lg:flex justify-center flex-1">
           <nav className="flex gap-8 items-center">
             {menuItems.map((item, i) => (
               <div
                 key={i}
                 className="relative group flex items-center gap-1"
                 onMouseEnter={() => {
-                  if (window.innerWidth > 768 && item.submenu) {
+                  if (window.innerWidth >= 1200 && item.submenu) {
+                    // <= CORRIGÉ
                     clearTimeout(closeTimeoutRef.current);
                     setActiveMenu(item.title);
                   }
                 }}
                 onMouseLeave={() => {
-                  if (window.innerWidth > 768 && item.submenu) {
-                    closeTimeoutRef.current = setTimeout(() => setActiveMenu(null), 500);
+                  if (window.innerWidth >= 1200 && item.submenu) {
+                    // <= CORRIGÉ
+                    closeTimeoutRef.current = setTimeout(
+                      () => setActiveMenu(null),
+                      500
+                    );
                   }
                 }}
               >
@@ -95,21 +123,29 @@ export default function MegaMenu() {
                       navigate(item.href);
                     }}
                     className={`
-                      flex items-center gap-2 text-[11px] uppercase leading-4 hover:text-[#009992]
-                      ${pathname === item.href ? 'text-[#009992]/80' : 'text-[#293d4c]'}
+                      flex items-center gap-2 text-[20px] uppercase font-extrabold leading-4 hover:text-orange-500
+                      ${
+                        pathname === item.href ? "text-white" : "text-[#293d4c]"
+                      }
                     `}
                   >
-                    {item.icon && <item.icon className="w-4 h-4 text-[#009992]" />}
+                    {item.icon && (
+                      <item.icon className="w-4 h-4 text-orange-500" />
+                    )}
                     <span>{item.title}</span>
                   </a>
                 ) : (
                   <button
                     onClick={() =>
-                      setActiveMenu(activeMenu === item.title ? null : item.title)
+                      setActiveMenu(
+                        activeMenu === item.title ? null : item.title
+                      )
                     }
                     className="flex items-center gap-2 text-[11px] uppercase leading-4 text-[#293d4c] hover:text-[#009992]"
                   >
-                    {item.icon && <item.icon className="w-4 h-4 text-[#009992]" />}
+                    {item.icon && (
+                      <item.icon className="w-4 h-4 text-[#009992]" />
+                    )}
                     <span>{item.title}</span>
                   </button>
                 )}
@@ -118,29 +154,38 @@ export default function MegaMenu() {
           </nav>
         </div>
 
+        {/* BURGER ICON MOBILE */}
         {!mobileOpen && (
-          <div className="md:hidden">
+          <div className=" lg:hidden p-6">
             <button onClick={() => setMobileOpen(true)}>
-              <Menu size={24} />
+              <Menu size={34} color="white" />
             </button>
           </div>
         )}
       </div>
 
+      {/* SOUS-MENU DESKTOP */}
       <AnimatePresence>
         {activeMenu && activeSubmenu && (
           <motion.div
             ref={menuContainerRef}
             onMouseEnter={() => clearTimeout(closeTimeoutRef.current)}
-            onMouseLeave={() => (closeTimeoutRef.current = setTimeout(() => setActiveMenu(null), 500))}
+            onMouseLeave={() =>
+              (closeTimeoutRef.current = setTimeout(
+                () => setActiveMenu(null),
+                500
+              ))
+            }
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
             className="bg-white shadow-sm overflow-hidden py-6"
           >
             <div className="max-w-7xl mx-auto px-4">
-              <div className={`grid ${gridCols} gap-6 text-[10px] text-[#293d4c]`}>
+              <div
+                className={`grid ${gridCols} gap-6 text-[10px] text-[#293d4c]`}
+              >
                 {activeSubmenu.map((col, idx) => (
                   <div key={idx}>
                     {col.title && (
@@ -172,6 +217,7 @@ export default function MegaMenu() {
         )}
       </AnimatePresence>
 
+      {/* MENU MOBILE */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -186,29 +232,33 @@ export default function MegaMenu() {
             />
             <motion.div
               key="panel"
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.5 }}
-              className="fixed top-0 right-0 w-3/5 h-full bg-white/30 shadow-lg z-50"
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.5 }}
+              className="fixed top-0 right-0 w-2/5 h-full bg-white/30 shadow-lg z-50"
             >
-              <div className="flex justify-end p-4">
+              <div className="flex justify-end p-8">
                 <button onClick={() => setMobileOpen(false)}>
-                  <X size={24} />
+                  <X size={34} color="white" />
                 </button>
               </div>
-              <nav className="flex flex-col space-y-4 px-4 pb-6">
+              <nav className="flex flex-col space-y-4 px-4 mt-20 pb-6">
                 {menuItems.map((item, i) => (
                   <div key={i}>
                     <button
                       onClick={() =>
                         item.href
                           ? navigate(item.href, 500)
-                          : setActiveMenu(activeMenu === item.title ? null : item.title)
+                          : setActiveMenu(
+                              activeMenu === item.title ? null : item.title
+                            )
                       }
-                      className="flex items-center gap-2 font-semibold uppercase text-sm mb-3 cursor-pointer text-white hover:text-[#009992] hover:bg-white/80 rounded p-2 text-left w-full"
+                      className="flex items-center gap-2 font-bold uppercase text-3xl mb-3 cursor-pointer text-white hover:text-orange-500 hover:italic hover:bg-white/80 rounded p-2 text-left w-full"
                     >
-                      {item.icon && <item.icon className="w-4 h-4 text-white" />}
+                      {item.icon && (
+                        <item.icon className="w-4 h-4 text-white" />
+                      )}
                       <span>{item.title}</span>
                     </button>
                     {activeMenu === item.title && item.submenu && (
@@ -221,18 +271,16 @@ export default function MegaMenu() {
                               </div>
                             )}
                             <ul className="space-y-1">
-                              {col.items
-                                .filter(Boolean)
-                                .map((subItem, j) => (
-                                  <li key={j}>
-                                    <button
-                                      onClick={() => navigate(subItem.href, 500)}
-                                      className="text-[10px] uppercase text-white hover:text-black hover:bg-[#009992]/80 block leading-7 text-left w-full"
-                                    >
-                                      {subItem.title}
-                                    </button>
-                                  </li>
-                                ))}
+                              {col.items.filter(Boolean).map((subItem, j) => (
+                                <li key={j}>
+                                  <button
+                                    onClick={() => navigate(subItem.href, 500)}
+                                    className="text-[10px] uppercase text-white hover:text-black hover:bg-[#009992]/80 block leading-7 text-left w-full"
+                                  >
+                                    {subItem.title}
+                                  </button>
+                                </li>
+                              ))}
                             </ul>
                           </div>
                         ))}

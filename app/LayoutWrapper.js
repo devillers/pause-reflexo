@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Script from 'next/script';
 import CookieConsent from 'react-cookie-consent';
 import { usePathname } from 'next/navigation';
@@ -38,7 +38,7 @@ export default function LayoutWrapper({ children }) {
       {!isAdmin && !isSignin && !hideLayout && <Header />}
       <main>{children}</main>
       {!isAdmin && !isSignin && !hideLayout && <Footer />}
-      {!isAdmin && !isSignin && !isContact && !isSoins && !hideLayout && <FloatingContact />}
+      
 
       {!isAdmin && !isSignin && (
         <CookieConsent

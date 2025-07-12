@@ -24,7 +24,7 @@ export default function FullScreenPage() { // <--- NOM ! (pas FullScreenBgPage)
       <motion.div
         initial={{ backdropFilter: "blur(0px)", WebkitBackdropFilter: "blur(0px)" }}
         whileHover={{ backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)" }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
+        transition={{ duration: 2, ease: "easeInOut" }}
         className="relative z-20 min-h-screen min-w-full flex items-center justify-center"
         style={{ backdropFilter: "blur(2px)", WebkitBackdropFilter: "blur(2px)" }}
       >

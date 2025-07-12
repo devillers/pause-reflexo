@@ -30,7 +30,7 @@ export default function Header() {
 
   // Pour toutes les autres routes -> MegaMenu
   return (
-    <header>
+    <header className=''>
       <MegaMenu />
     </header>
   );

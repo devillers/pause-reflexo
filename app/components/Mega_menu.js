@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Link, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import menuItems from "../../data/menuItems";
@@ -62,11 +62,9 @@ export default function MegaMenu() {
   }, [pathname]);
 
   return (
-   <header
-      className={
-        `fixed top-0 left-0 w-full z-50 transition-colors duration-300 
-        ${scrolled ? 'bg-white/10 shadow-md backdrop-blur' : 'bg-transparent'}`
-      }
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-colors duration-300 
+        ${scrolled ? "bg-white/10 shadow-md backdrop-blur" : "bg-transparent"}`}
     >
       <AnimatePresence>
         {progress > 0 && (
@@ -83,11 +81,10 @@ export default function MegaMenu() {
 
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <a
-            className="text-[30px] lg:text-[20px] italic font-extrabold uppercase text-white hover:text-orange-500"
-            href="/"
-          >
-            Pause Reflexo
+          <a href="/">
+            <h1 className="text-[40px] italic font-extrabold uppercase text-white">
+              sana<span className="text-orange-500 ">luna</span>
+            </h1>
           </a>
         </div>
 
@@ -156,7 +153,7 @@ export default function MegaMenu() {
 
         {/* BURGER ICON MOBILE */}
         {!mobileOpen && (
-          <div className=" lg:hidden p-6">
+          <div className=" lg:hidden ">
             <button onClick={() => setMobileOpen(true)}>
               <Menu size={34} color="white" />
             </button>
@@ -238,7 +235,7 @@ export default function MegaMenu() {
               transition={{ type: "tween", duration: 0.5 }}
               className="fixed top-0 right-0 lg:w-2/5 w-3/5 h-full bg-white/30 shadow-lg z-50"
             >
-              <div className="flex justify-end p-8">
+              <div className="absolute right-6 flex justify-end top-6">
                 <button onClick={() => setMobileOpen(false)}>
                   <X size={34} color="white" />
                 </button>

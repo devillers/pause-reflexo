@@ -6,20 +6,20 @@ const menuItems = [
   { title: "Accueil", href: "/" },
   {
     title: "nos stages",
-    href: "/nos-stages",
+    href: "/",
   },
  
   {
     title: "réserver",
-    href: "/stages",
+    href: "/",
     
   },
 
   {
     title: "Blog",
-    href: "/blog",
+    href: "/",
   },
-  { title: "contact", href: "/contact" },
+  { title: "contact", href: "/" },
   // {
   //   title: "06 09 07 74 38",
   //   href: "tel:+33609077438",

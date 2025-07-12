@@ -7,12 +7,11 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-[12px]">Pause</h3>
-            <span className="text-[#009992] text-[12px]">Reflexologie</span>
+            <h3 className="font-bold uppercase text-[12px]">Vel<span className="text-orange-500 text-[12px]">aya</span></h3>
+            
           </div>
           <p className="text-[10px] text-gray-600 mt-2 text-justify pr-6 leading-6">
-            Cécile Durindel, Praticienne en réflexologie et Shiatsu assis au
-            pays du Mont-Blanc
+          lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           </p>
         </div>
         <div className="left">

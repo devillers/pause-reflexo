@@ -1,3 +1,5 @@
+//app/admin/settings/destination/page.js
+
 "use client";
 export const dynamic = "force-dynamic";
 
@@ -20,7 +22,9 @@ function HeaderGeneralDestinationAdmin() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("/api/admin/settings-destination/get", { cache: "no-store" });
+      const res = await fetch("/api/admin/settings-destination/get", {
+        cache: "no-store",
+      });
       if (res.ok) {
         const data = await res.json();
         setHero({ ...emptyHero, ...data });
@@ -47,7 +51,10 @@ function HeaderGeneralDestinationAdmin() {
       }));
     }
   };
-  const { getRootProps, getInputProps } = useDropzone({ accept: { "image/*": [] }, onDrop });
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { "image/*": [] },
+    onDrop,
+  });
 
   async function saveHero() {
     const res = await fetch("/api/admin/settings-destination/post", {
@@ -63,13 +70,15 @@ function HeaderGeneralDestinationAdmin() {
 
   return (
     <section className="mb-10 p-6 bg-white rounded shadow max-w-3xl mx-auto">
-      <h2 className="font-semibold text-lg mb-4">Header général de la page Destination</h2>
+      <h2 className="font-semibold text-lg mb-4">
+        Header général de la page Destination
+      </h2>
       {[0, 1].map((idx) => (
         <input
           key={idx}
           type="text"
           value={hero.heroTitleLines?.[idx] || ""}
-          onChange={e => {
+          onChange={(e) => {
             const lines = [...(hero.heroTitleLines || ["", ""])];
             lines[idx] = e.target.value;
             setHero((h) => ({ ...h, heroTitleLines: lines }));
@@ -80,7 +89,9 @@ function HeaderGeneralDestinationAdmin() {
       ))}
       <textarea
         value={hero.heroDescription}
-        onChange={e => setHero(h => ({ ...h, heroDescription: e.target.value }))}
+        onChange={(e) =>
+          setHero((h) => ({ ...h, heroDescription: e.target.value }))
+        }
         placeholder="Description (optionnelle)"
         className="w-full p-2 border rounded text-sm mb-2"
         rows={2}
@@ -88,27 +99,37 @@ function HeaderGeneralDestinationAdmin() {
       <input
         type="text"
         value={hero.heroCtaText}
-        onChange={e => setHero(h => ({ ...h, heroCtaText: e.target.value }))}
+        onChange={(e) =>
+          setHero((h) => ({ ...h, heroCtaText: e.target.value }))
+        }
         placeholder="Texte bouton (optionnel)"
         className="w-full p-2 border rounded text-sm mb-2"
       />
       <input
         type="text"
         value={hero.heroCtaLink}
-        onChange={e => setHero(h => ({ ...h, heroCtaLink: e.target.value }))}
+        onChange={(e) =>
+          setHero((h) => ({ ...h, heroCtaLink: e.target.value }))
+        }
         placeholder="Lien bouton (optionnel)"
         className="w-full p-2 border rounded text-sm mb-2"
       />
       <input
         type="text"
         value={hero.heroImage?.alt || ""}
-        onChange={e =>
-          setHero(h => ({ ...h, heroImage: { ...h.heroImage, alt: e.target.value } }))
+        onChange={(e) =>
+          setHero((h) => ({
+            ...h,
+            heroImage: { ...h.heroImage, alt: e.target.value },
+          }))
         }
         placeholder="Alt de l'image"
         className="w-full p-2 border rounded text-sm mb-2"
       />
-      <div {...getRootProps()} className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded">
+      <div
+        {...getRootProps()}
+        className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded"
+      >
         <input {...getInputProps()} />
         <p className="text-sm text-gray-600">
           Déposez l’image principale ici ou cliquez
@@ -159,6 +180,8 @@ const emptySejour = {
   sport: "",
   niveau: "",
   description: "",
+  dateDebut: "",
+  dateFin: "",
   pointsForts: [],
   heroImage: { url: "", alt: "" },
   imagesMain: [],
@@ -209,7 +232,10 @@ export default function AdminSettingsDestination() {
       }));
     }
   };
-  const heroDrop = useDropzone({ accept: { "image/*": [] }, onDrop: onDropHero });
+  const heroDrop = useDropzone({
+    accept: { "image/*": [] },
+    onDrop: onDropHero,
+  });
 
   // Pour imagesMain (miniatures)
   const onDropMain = async (files) => {
@@ -229,7 +255,10 @@ export default function AdminSettingsDestination() {
       }));
     }
   };
-  const mainDrop = useDropzone({ accept: { "image/*": [] }, onDrop: onDropMain });
+  const mainDrop = useDropzone({
+    accept: { "image/*": [] },
+    onDrop: onDropMain,
+  });
 
   // Pour imagesGallery (galerie)
   const onDropGallery = async (files) => {
@@ -249,7 +278,10 @@ export default function AdminSettingsDestination() {
       }));
     }
   };
-  const galleryDrop = useDropzone({ accept: { "image/*": [] }, onDrop: onDropGallery });
+  const galleryDrop = useDropzone({
+    accept: { "image/*": [] },
+    onDrop: onDropGallery,
+  });
 
   // ---- Form handlers ----
   const handleChange = (e) => {
@@ -257,7 +289,10 @@ export default function AdminSettingsDestination() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
   const handleHeroAltChange = (e) => {
-    setForm((prev) => ({ ...prev, heroImage: { ...prev.heroImage, alt: e.target.value } }));
+    setForm((prev) => ({
+      ...prev,
+      heroImage: { ...prev.heroImage, alt: e.target.value },
+    }));
   };
 
   const handlePointFortsChange = (i, value) => {
@@ -269,12 +304,23 @@ export default function AdminSettingsDestination() {
   // ---- Submit/save ----
   const handleSave = async () => {
     const method = isEditing ? "PUT" : "POST";
-    const url = isEditing ? `/api/destination/${form.slug}` : "/api/destination";
+    const url = isEditing
+      ? `/api/destination/${form.slug}`
+      : "/api/destination";
+
+    // Conversion en Date ou null pour MongoDB
+    const formToSave = {
+      ...form,
+      dateDebut: form.dateDebut ? new Date(form.dateDebut) : null,
+      dateFin: form.dateFin ? new Date(form.dateFin) : null,
+    };
+
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(formToSave),
     });
+
     if (res.ok) {
       alert("✅ Séjour sauvegardé");
       setForm(emptySejour);
@@ -288,7 +334,12 @@ export default function AdminSettingsDestination() {
 
   // ---- Edit / Delete ----
   const editSejour = (sejour) => {
-    setForm({ ...emptySejour, ...sejour });
+    setForm({
+      ...emptySejour,
+      ...sejour,
+      dateDebut: sejour.dateDebut ? sejour.dateDebut.slice(0, 10) : "",
+      dateFin: sejour.dateFin ? sejour.dateFin.slice(0, 10) : "", // 👈 AJOUT
+    });
     setSelected(sejour.slug);
     setIsEditing(true);
   };
@@ -342,7 +393,10 @@ export default function AdminSettingsDestination() {
         <h2 className="font-semibold mb-2">Séjours existants</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {sejours.map((s) => (
-            <div key={s.slug} className="border rounded p-3 bg-gray-50 flex flex-col gap-2">
+            <div
+              key={s.slug}
+              className="border rounded p-3 bg-gray-50 flex flex-col gap-2"
+            >
               <span className="font-bold">{s.titre}</span>
               {s.heroImage?.url && (
                 <img
@@ -391,6 +445,24 @@ export default function AdminSettingsDestination() {
           className="w-full p-2 border rounded text-sm"
           disabled={isEditing}
         />
+        <input
+          name="dateDebut"
+          value={form.dateDebut || ""}
+          onChange={handleChange}
+          placeholder="Date de début"
+          className="w-full p-2 border rounded text-sm"
+          type="date"
+        />
+
+        <input
+          name="dateFin"
+          value={form.dateFin || ""}
+          onChange={handleChange}
+          placeholder="Date de fin"
+          className="w-full p-2 border rounded text-sm"
+          type="date"
+        />
+
         <input
           name="destination"
           value={form.destination}
@@ -475,7 +547,10 @@ export default function AdminSettingsDestination() {
         {/* Hero Image */}
         <div>
           <label className="font-semibold">Image Header (hero)</label>
-          <div {...heroDrop.getRootProps()} className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded">
+          <div
+            {...heroDrop.getRootProps()}
+            className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded"
+          >
             <input {...heroDrop.getInputProps()} />
             <p className="text-sm text-gray-600">
               Déposez l’image principale ici ou cliquez
@@ -517,7 +592,10 @@ export default function AdminSettingsDestination() {
         {/* Images miniatures */}
         <div>
           <label className="font-semibold">Images miniatures (liste)</label>
-          <div {...mainDrop.getRootProps()} className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded">
+          <div
+            {...mainDrop.getRootProps()}
+            className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded"
+          >
             <input {...mainDrop.getInputProps()} />
             <p className="text-sm text-gray-600">
               Déposez une image miniature ici ou cliquez
@@ -562,7 +640,10 @@ export default function AdminSettingsDestination() {
         {/* Galerie */}
         <div>
           <label className="font-semibold">Galerie (détail)</label>
-          <div {...galleryDrop.getRootProps()} className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded">
+          <div
+            {...galleryDrop.getRootProps()}
+            className="mt-2 border-2 border-dashed p-4 text-center cursor-pointer bg-gray-50 hover:bg-gray-100 rounded"
+          >
             <input {...galleryDrop.getInputProps()} />
             <p className="text-sm text-gray-600">
               Déposez une image de galerie ici ou cliquez

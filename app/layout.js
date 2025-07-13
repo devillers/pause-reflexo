@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png" />
       </Head>
-      <body className="relative" suppressHydrationWarning={true}>
+      <body className="overflow-x-hidden" suppressHydrationWarning={true}>
         <Providers>
           <LayoutProvider>
             <LayoutWrapper>

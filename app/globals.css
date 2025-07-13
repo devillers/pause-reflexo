@@ -3,6 +3,10 @@
 @import "tailwindcss";
 /* //@plugin "@tailwindcss/typography"; */
 
+
+
+
+
 /* 2. VOS STYLES PERSONNALISÉS */
 @layer components {
   /* TITRES */

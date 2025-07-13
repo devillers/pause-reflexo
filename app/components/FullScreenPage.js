@@ -33,5 +33,5 @@ export default function FullScreenPage() {
         </p>
       </motion.div>
     </div>
-  );
+  )
 }

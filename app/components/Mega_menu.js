@@ -1,3 +1,5 @@
+//app/components/Mega_menu.js
+
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";

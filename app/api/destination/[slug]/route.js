@@ -3,8 +3,9 @@
 import { connectDb } from "../../../../lib/db.mjs";
 import Sejour from "../../../../models/Sejour";
 
-export async function GET(context) {
-  const { params } = await Promise.resolve(context);
+// --- GET ---
+export async function GET(request, context) {
+  const { params } = context;
   await connectDb();
   const sejour = await Sejour.findOne({ slug: params.slug }).lean();
   if (!sejour)
@@ -12,12 +13,15 @@ export async function GET(context) {
   return Response.json(sejour);
 }
 
-// MAJ séjour
-export async function PUT(context) {
-  const { params, req } = await Promise.resolve(context);
+// --- PUT ---
+export async function PUT(request, context) {
+  const { params } = context;
   await connectDb();
-  const data = await req.json();
-  delete data.slug;
+  const data = await request.json();
+  delete data.slug; // Ne pas modifier le slug !
+  // Optionnel : clean date (par sécurité, si besoin)
+  if (data.dateDebut) data.dateDebut = new Date(data.dateDebut);
+  if (data.dateFin) data.dateFin = new Date(data.dateFin);
   const sejour = await Sejour.findOneAndUpdate(
     { slug: params.slug },
     data,
@@ -28,9 +32,9 @@ export async function PUT(context) {
   return Response.json(sejour);
 }
 
-// Suppression
-export async function DELETE(context) {
-  const { params } = await Promise.resolve(context);
+// --- DELETE ---
+export async function DELETE(request, context) {
+  const { params } = context;
   await connectDb();
   const sejour = await Sejour.findOneAndDelete({ slug: params.slug });
   if (!sejour)

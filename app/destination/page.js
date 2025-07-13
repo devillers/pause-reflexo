@@ -1,18 +1,23 @@
+// app/destination/page.js
+
 import Link from "next/link";
 import HeroHeader from "../components/HeroHeader";
+import { GrYoga } from "react-icons/gr";
+import { SiLevelsdotfyi } from "react-icons/si";
+import { FaCalendarDays } from "react-icons/fa6";
 
 // Helper pour URL API compatible server/client
 function getBaseUrl() {
-  // Côté client : on laisse fetch gérer l'URL relative
   if (typeof window !== "undefined") return "";
-  // Côté serveur : on a besoin d'une URL absolue (en build ou dev SSR)
   return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 }
 
 // Fetch header config
 async function getDestinationHeader() {
   const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/admin/settings-destination/get`, { cache: "no-store" });
+  const res = await fetch(`${baseUrl}/api/admin/settings-destination/get`, {
+    cache: "no-store",
+  });
   if (!res.ok) return null;
   return res.json();
 }
@@ -26,7 +31,6 @@ async function getSejours() {
 }
 
 export default async function DestinationPage() {
-  // Parallel fetch
   const [header, sejours] = await Promise.all([
     getDestinationHeader(),
     getSejours(),
@@ -54,23 +58,99 @@ export default async function DestinationPage() {
               className="max-w-sm rounded overflow-hidden shadow-lg bg-white hover:shadow-xl transition block mx-auto"
             >
               {/* Hero Image */}
-              {sejour.heroImage?.url && (
-                <img
-                  className="w-full h-48 object-cover"
-                  src={sejour.heroImage.url}
-                  alt={sejour.heroImage.alt || sejour.titre}
-                />
-              )}
+              <div className="relative">
+                {sejour.heroImage?.url && (
+                  <img
+                    className="w-full max-w-full h-48 object-cover rounded-t-lg"
+                    src={sejour.heroImage.url}
+                    alt={sejour.heroImage.alt || sejour.titre}
+                  />
+                )}
+                {/* Prix */}
+                <div className="absolute top-4 right-4 z-10">
+                  <span className="bg-white text-black px-4 py-2  rounded text-sm font-bold shadow-md">
+                    À partir de {sejour.prix}€
+                  </span>
+                </div>
+              </div>
 
               <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">{sejour.titre}</div>
-                <div className="text-xs text-gray-500 mb-1">{sejour.destination}</div>
-                <div className="flex flex-wrap gap-2 text-sm mb-2">
-                  <span>🧘 {sejour.sport}</span>
-                  <span>⏱ {sejour.duree}</span>
-                  <span>⭐ {sejour.niveau}</span>
+                <div className="font-thin text-xl mb-2">{sejour.titre}</div>
+
+                {/* Dates séjour */}
+                {(sejour.dateDebut || sejour.dateFin) && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#e7f2fc] text-[#165ba9] text-xs font-semibold shadow-sm">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 mr-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      {sejour.dateDebut && (
+                        <span>
+                          Début&nbsp;:{" "}
+                          <span className="font-bold">
+                            {new Date(sejour.dateDebut).toLocaleDateString(
+                              "fr-FR",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </span>
+                        </span>
+                      )}
+                      {sejour.dateDebut && sejour.dateFin && (
+                        <span className="mx-1 font-bold text-[#bdbdbd]">—</span>
+                      )}
+                      {sejour.dateFin && (
+                        <span>
+                          <span className="font-bold">
+                            {new Date(sejour.dateFin).toLocaleDateString(
+                              "fr-FR",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </span>
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                <div className="text-sm text-orange-500 mb-1">
+                  {sejour.destination}
                 </div>
-                <p className="text-gray-700 text-base">{sejour.resume}</p>
+                <div className="flex flex-wrap gap-2 text-sm mb-2">
+                  <div className="flex items-center gap-x-2 text-sm">
+                    <GrYoga className="text-sm" />
+                    <span>{sejour.sport}</span>
+                  </div>
+                  <div className="flex items-center gap-x-2 text-sm">
+                    <FaCalendarDays className="text-sm" />
+                    <span>{sejour.duree}</span>
+                  </div>
+                  <div className="flex items-center gap-x-2 text-sm">
+                    <SiLevelsdotfyi className="text-sm" />
+                    <span>{sejour.niveau}</span>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-xs text-justify">
+                  {sejour.resume}
+                </p>
               </div>
 
               {/* Miniatures principales */}
@@ -100,11 +180,6 @@ export default async function DestinationPage() {
                   ))}
                 </div>
               )}
-
-              {/* Prix */}
-              <div className="px-6 pb-4 text-right font-bold text-[#3855C1]">
-                À partir de {sejour.prix}€
-              </div>
             </Link>
           ))}
         </div>

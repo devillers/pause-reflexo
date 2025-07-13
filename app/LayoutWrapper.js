@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
-import FloatingContact from './components/FloatingContact';
+
 import { useLayout } from './LayoutContext';
 
 export default function LayoutWrapper({ children }) {

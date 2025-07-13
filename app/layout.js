@@ -1,3 +1,4 @@
+// app/layout.js
 import './globals.css'
 import { LayoutProvider } from './LayoutContext'
 import LayoutWrapper from './LayoutWrapper'

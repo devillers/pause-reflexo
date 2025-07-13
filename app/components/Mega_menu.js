@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Link, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import menuItems from "../../data/menuItems";
+import { useLayout } from "@/app/LayoutContext";
 
 export default function MegaMenu() {
   const pathname = usePathname();
   const router = useRouter();
+  const { setIsBlurred } = useLayout();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
@@ -38,10 +40,12 @@ export default function MegaMenu() {
     setTimeout(() => setProgress(0), 300);
   };
 
+  // Navigation centralisée (desktop et mobile)
   const navigate = (href, delay = 0) => {
     startProgress();
     setActiveMenu(null);
     setMobileOpen(false);
+    setIsBlurred(false); // On désactive le blur sur toute navigation
     setTimeout(() => router.push(href), delay);
   };
 
@@ -49,7 +53,7 @@ export default function MegaMenu() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10); // >10px = considéré "scrolled"
+      setScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -59,6 +63,7 @@ export default function MegaMenu() {
     completeProgress();
     setActiveMenu(null);
     setMobileOpen(false);
+    setIsBlurred(false); // Sûr de désactiver le blur au changement de route
   }, [pathname]);
 
   return (
@@ -83,7 +88,7 @@ export default function MegaMenu() {
         <div className="flex items-center gap-2">
           <a href="/">
             <h1 className="text-[40px] italic font-extrabold uppercase text-white">
-              sana<span className="text-orange-500 ">luna</span>
+              Sana<span className="text-orange-500 ">luna</span>
             </h1>
           </a>
         </div>
@@ -97,14 +102,12 @@ export default function MegaMenu() {
                 className="relative group flex items-center gap-1"
                 onMouseEnter={() => {
                   if (window.innerWidth >= 1200 && item.submenu) {
-                    // <= CORRIGÉ
                     clearTimeout(closeTimeoutRef.current);
                     setActiveMenu(item.title);
                   }
                 }}
                 onMouseLeave={() => {
                   if (window.innerWidth >= 1200 && item.submenu) {
-                    // <= CORRIGÉ
                     closeTimeoutRef.current = setTimeout(
                       () => setActiveMenu(null),
                       500
@@ -153,8 +156,13 @@ export default function MegaMenu() {
 
         {/* BURGER ICON MOBILE */}
         {!mobileOpen && (
-          <div className=" lg:hidden ">
-            <button onClick={() => setMobileOpen(true)}>
+          <div className="lg:hidden">
+            <button
+              onClick={() => {
+                setMobileOpen(true);
+                setIsBlurred(true); // Blur activé à l'ouverture du menu mobile
+              }}
+            >
               <Menu size={34} color="white" />
             </button>
           </div>
@@ -218,6 +226,7 @@ export default function MegaMenu() {
       <AnimatePresence>
         {mobileOpen && (
           <>
+            {/* Overlay noir */}
             <motion.div
               key="overlay"
               initial={{ opacity: 0 }}
@@ -225,8 +234,12 @@ export default function MegaMenu() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
-              onClick={() => setMobileOpen(false)}
+              onClick={() => {
+                setMobileOpen(false);
+                setIsBlurred(false); // Désactive le blur sur overlay
+              }}
             />
+            {/* Panel du menu mobile */}
             <motion.div
               key="panel"
               initial={{ x: "100%" }}
@@ -236,7 +249,12 @@ export default function MegaMenu() {
               className="fixed top-0 right-0 lg:w-2/5 w-3/5 h-full bg-white/30 shadow-lg z-50"
             >
               <div className="absolute right-6 flex justify-end top-6">
-                <button onClick={() => setMobileOpen(false)}>
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setIsBlurred(false); // Désactive le blur sur la croix
+                  }}
+                >
                   <X size={34} color="white" />
                 </button>
               </div>
@@ -244,13 +262,17 @@ export default function MegaMenu() {
                 {menuItems.map((item, i) => (
                   <div key={i}>
                     <button
-                      onClick={() =>
-                        item.href
-                          ? navigate(item.href, 500)
-                          : setActiveMenu(
-                              activeMenu === item.title ? null : item.title
-                            )
-                      }
+                      onClick={() => {
+                        if (item.href) {
+                          setMobileOpen(false);
+                          setIsBlurred(false);
+                          setTimeout(() => router.push(item.href), 500);
+                        } else {
+                          setActiveMenu(
+                            activeMenu === item.title ? null : item.title
+                          );
+                        }
+                      }}
                       className="flex items-center gap-2 font-bold uppercase text-3xl mb-3 cursor-pointer text-white hover:text-orange-500 hover:italic hover:bg-white/80 rounded p-2 text-left w-full"
                     >
                       {item.icon && (
@@ -271,7 +293,14 @@ export default function MegaMenu() {
                               {col.items.filter(Boolean).map((subItem, j) => (
                                 <li key={j}>
                                   <button
-                                    onClick={() => navigate(subItem.href, 500)}
+                                    onClick={() => {
+                                      setMobileOpen(false);
+                                      setIsBlurred(false);
+                                      setTimeout(
+                                        () => router.push(subItem.href),
+                                        500
+                                      );
+                                    }}
                                     className="text-[10px] uppercase text-white hover:text-black hover:bg-[#009992]/80 block leading-7 text-left w-full"
                                   >
                                     {subItem.title}

@@ -84,7 +84,7 @@ export default function MegaMenu() {
         )}
       </AnimatePresence>
 
-      <div className="--max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className=" mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <a href="/">
             <h1 className="text-[40px] italic font-extrabold uppercase text-white">
@@ -187,7 +187,7 @@ export default function MegaMenu() {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="bg-white shadow-sm overflow-hidden py-6"
           >
-            <div className="---max-w-7xl mx-auto px-4">
+            <div className=" mx-auto px-4">
               <div
                 className={`grid ${gridCols} gap-6 text-[10px] text-[#293d4c]`}
               >

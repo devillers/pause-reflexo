@@ -1,22 +1,27 @@
 import Link from "next/link";
 import HeroHeader from "../components/HeroHeader";
 
-// Récupère la config header "destination" depuis la DB
+// Helper pour URL API compatible server/client
+function getBaseUrl() {
+  // Côté client : on laisse fetch gérer l'URL relative
+  if (typeof window !== "undefined") return "";
+  // Côté serveur : on a besoin d'une URL absolue (en build ou dev SSR)
+  return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+}
+
+// Fetch header config
 async function getDestinationHeader() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/settings-destination/get`,
-    { cache: "no-store" }
-  );
+  const baseUrl = getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/admin/settings-destination/get`, { cache: "no-store" });
   if (!res.ok) return null;
   return res.json();
 }
 
-// Récupère la liste des séjours
+// Fetch séjours
 async function getSejours() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/destination`,
-    { cache: "no-store" }
-  );
+  const baseUrl = getBaseUrl();
+  const res = await fetch(`${baseUrl}/api/destination`, { cache: "no-store" });
+  if (!res.ok) return [];
   return res.json();
 }
 
@@ -29,7 +34,7 @@ export default async function DestinationPage() {
 
   return (
     <>
-      {/* --- Hero Header éditable (optionnel si header existe) --- */}
+      {/* Header full width */}
       {header?.heroImage?.url && (
         <HeroHeader
           titleLines={header.heroTitleLines || []}
@@ -40,7 +45,7 @@ export default async function DestinationPage() {
         />
       )}
 
-      <main className="max-w-7xl mx-auto">
+      <main className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8 max-w-5xl mx-auto">
           {sejours.map((sejour) => (
             <Link

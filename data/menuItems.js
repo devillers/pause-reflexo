@@ -5,8 +5,8 @@
 const menuItems = [
   { title: "Accueil", href: "/" },
   {
-    title: "nos stages",
-    href: "/",
+    title: "nos destinations",
+    href: "/destination",
   },
  
   {

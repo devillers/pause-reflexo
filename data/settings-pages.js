@@ -3,7 +3,7 @@
 const settingsPages = [
   { title: "Test", href: "/admin/settings/test" },
   { title: "Blog", href: "/admin/settings/blog" },
-  { title: "Soins", href: "/admin/settings/soins" },
+  { title: "Destination", href: "/admin/settings/destination" },
 ];
 
 export default settingsPages;

@@ -46,6 +46,95 @@ export default function AdminSettingsDestination() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Upload image vers Cloudinary et renvoie l'URL
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/uploadCloudinary", {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) {
+      alert("Erreur lors de l'upload de l'image");
+      return null;
+    }
+    const { url } = await res.json();
+    return url;
+  };
+
+  // ---------- Handlers Images ----------
+  const onDropHero = async (files) => {
+    if (!files[0]) return;
+    const url = await uploadImage(files[0]);
+    if (url) {
+      setForm((prev) => ({
+        ...prev,
+        heroImage: { ...prev.heroImage, url },
+      }));
+    }
+  };
+
+  const handleHeroAltChange = (e) => {
+    const { value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      heroImage: { ...prev.heroImage, alt: value },
+    }));
+  };
+
+  const onRemoveHeroImage = () => {
+    setForm((prev) => ({ ...prev, heroImage: { url: "", alt: "" } }));
+  };
+
+  const onDropMain = async (files) => {
+    const uploads = [];
+    for (const file of files) {
+      const url = await uploadImage(file);
+      if (url) uploads.push({ url, alt: "" });
+    }
+    if (uploads.length > 0) {
+      setForm((prev) => ({
+        ...prev,
+        imagesMain: [...(prev.imagesMain || []), ...uploads],
+      }));
+    }
+  };
+
+  const removeMainImage = (idx) => {
+    setForm((prev) => ({
+      ...prev,
+      imagesMain: prev.imagesMain.filter((_, i) => i !== idx),
+    }));
+  };
+
+  const onDropGallery = async (files) => {
+    const uploads = [];
+    for (const file of files) {
+      const url = await uploadImage(file);
+      if (url) uploads.push({ url, alt: "" });
+    }
+    if (uploads.length > 0) {
+      setForm((prev) => ({
+        ...prev,
+        imagesGallery: [...(prev.imagesGallery || []), ...uploads],
+      }));
+    }
+  };
+
+  const removeGalleryImage = (idx) => {
+    setForm((prev) => ({
+      ...prev,
+      imagesGallery: prev.imagesGallery.filter((_, i) => i !== idx),
+    }));
+  };
+
+  // ---------- Reset du formulaire ----------
+  const handleReset = () => {
+    setForm(emptySejour);
+    setIsEditing(false);
+    setSelected(null);
+  };
+
   // Charger tous les séjours
   const loadSejours = async () => {
     setLoading(true);
@@ -136,6 +225,14 @@ export default function AdminSettingsDestination() {
         setIsEditing={setIsEditing}
         emptySejour={emptySejour}
         handleSave={handleSave}
+        handleReset={handleReset}
+        onDropHero={onDropHero}
+        handleHeroAltChange={handleHeroAltChange}
+        onRemoveHeroImage={onRemoveHeroImage}
+        onDropMain={onDropMain}
+        removeMainImage={removeMainImage}
+        onDropGallery={onDropGallery}
+        removeGalleryImage={removeGalleryImage}
         setSelected={setSelected}
       />
     </div>

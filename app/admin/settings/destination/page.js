@@ -66,29 +66,33 @@ export default function AdminSettingsDestination() {
 
   // CRUD actions
   const handleSave = async () => {
-    const method = isEditing ? "PUT" : "POST";
-    const url = isEditing ? `/api/destination/${form.slug}` : "/api/destination";
-    const formToSave = {
-      ...form,
-      dateDebut: form.dateDebut ? new Date(form.dateDebut) : null,
-      dateFin: form.dateFin ? new Date(form.dateFin) : null,
-    };
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formToSave),
-    });
-
-    if (res.ok) {
-      alert("✅ Séjour sauvegardé");
-      setForm(emptySejour);
-      setIsEditing(false);
-      setSelected(null);
-      await loadSejours();
-    } else {
-      alert("Erreur lors de la sauvegarde");
-    }
+  if (!form.heroImage?.url) {
+    alert("⚠️ Merci d’ajouter une image principale (hero) !");
+    return;
+  }
+  const method = isEditing ? "PUT" : "POST";
+  const url = isEditing ? `/api/destination/${form.slug}` : "/api/destination";
+  const formToSave = {
+    ...form,
+    dateDebut: form.dateDebut ? new Date(form.dateDebut) : null,
+    dateFin: form.dateFin ? new Date(form.dateFin) : null,
   };
+  const res = await fetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formToSave),
+  });
+
+  if (res.ok) {
+    alert("✅ Séjour sauvegardé");
+    setForm(emptySejour);
+    setIsEditing(false);
+    setSelected(null);
+    await loadSejours();
+  } else {
+    alert("Erreur lors de la sauvegarde");
+  }
+};
 
   const editSejour = (sejour) => {
     setForm({

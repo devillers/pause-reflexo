@@ -31,6 +31,21 @@ export default function SejourForm({
       onDrop: onDropHero,
     });
 
+
+     const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/uploadCloudinary", {
+      method: "POST",
+      body: formData,
+    });
+    if (res.ok) {
+      const { url } = await res.json();
+      return url;
+    }
+    throw new Error("Upload échoué");
+  };
+
   // Miniatures Dropzone
   const { getRootProps: getMainRootProps, getInputProps: getMainInputProps } =
     useDropzone({
@@ -354,6 +369,7 @@ export default function SejourForm({
         setHebergementImages={(hebergementImages) =>
           setForm((prev) => ({ ...prev, hebergementImages }))
         }
+        uploadImage={uploadImage}
       />
 
       {/* Boutons */}

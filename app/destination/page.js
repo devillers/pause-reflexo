@@ -146,7 +146,7 @@ export default async function DestinationPage() {
               </div>
 
               {/* Miniatures principales */}
-              {/* {sejour.imagesMain?.length > 0 && (
+              {sejour.imagesMain?.length > 0 && (
                 <div className="px-6 pt-2 pb-4 flex gap-2">
                   {sejour.imagesMain?.slice(0, 2).map((img, i) => (
                     <img
@@ -157,7 +157,7 @@ export default async function DestinationPage() {
                     />
                   ))}
                 </div>
-              )} */}
+              )}
 
               {/* "Badges" Points forts */}
               {sejour.pointsForts && sejour.pointsForts.length > 0 && (

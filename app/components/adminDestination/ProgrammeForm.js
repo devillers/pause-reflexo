@@ -1,7 +1,7 @@
 
 //app/components/adminDestination/ProgrammeForm.js
 "use client";
-import ProgrammeDayForm from "./ProgrammeForm";
+import ProgrammeDayForm from "./ProgrammeDayForm";
 
 export default function ProgrammeForm({
   programmeDescriptif,

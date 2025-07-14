@@ -5,6 +5,7 @@ import HeroHeader from "../components/HeroHeader";
 import { GrYoga } from "react-icons/gr";
 import { SiLevelsdotfyi } from "react-icons/si";
 import { FaCalendarDays } from "react-icons/fa6";
+import { IoTodayOutline } from "react-icons/io5";
 
 // Helper pour URL API compatible server/client
 function getBaseUrl() {
@@ -68,104 +69,95 @@ export default async function DestinationPage() {
                 )}
                 {/* Prix */}
                 <div className="absolute top-4 right-4 z-10">
-                  <span className="bg-white text-black px-4 py-2  rounded text-sm font-bold shadow-md">
-                    À partir de {sejour.prix}€
+                  <span className="bg-white text-black px-4 py-2 rounded text-xs font-light shadow-md">
+                    À partir de {sejour.prix} €
                   </span>
                 </div>
               </div>
 
               <div className="px-6 py-4">
-                <div className="font-thin text-xl mb-2">{sejour.titre}</div>
-
                 {/* Dates séjour */}
                 {(sejour.dateDebut || sejour.dateFin) && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#e7f2fc] text-[#165ba9] text-xs font-semibold shadow-sm">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mr-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
+                  <div className="flex justify-center items-center gap-2 mb-2">
+                    <span className="inline-flex items-center gap-x-2 px-3 py-1 rounded-full bg-white text-gray-900 text-xs font-light shadow-sm">
+                      {/* Icone bien centrée */}
+                      <IoTodayOutline className="text-base mr-1" />
+                      {/* Dates alignées */}
                       {sejour.dateDebut && (
-                        <span>
-                          Début&nbsp;:{" "}
-                          <span className="font-bold">
-                            {new Date(sejour.dateDebut).toLocaleDateString(
-                              "fr-FR",
-                              {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              }
-                            )}
-                          </span>
+                        <span className="font-light">
+                          {new Date(sejour.dateDebut).toLocaleDateString(
+                            "fr-FR",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )}
                         </span>
                       )}
                       {sejour.dateDebut && sejour.dateFin && (
-                        <span className="mx-1 font-bold text-[#bdbdbd]">—</span>
+                        <span className="mx-1 font-light text-[#bdbdbd]">
+                          —
+                        </span>
                       )}
                       {sejour.dateFin && (
-                        <span>
-                          <span className="font-bold">
-                            {new Date(sejour.dateFin).toLocaleDateString(
-                              "fr-FR",
-                              {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
-                              }
-                            )}
-                          </span>
+                        <span className="font-light">
+                          {new Date(sejour.dateFin).toLocaleDateString(
+                            "fr-FR",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )}
                         </span>
                       )}
                     </span>
                   </div>
                 )}
 
-                <div className="text-sm text-orange-500 mb-1">
-                  {sejour.destination}
+                <div className=" flex  items-center font-bold text-2xl my-5">
+                  <div className="font-thin text-xl mb-2 mr-2">
+                    {sejour.titre}
+                  </div>
+
+                  <div className="text-sm font-light text-orange-500 mb-1">
+                    {sejour.destination}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2 text-sm mb-2">
+
+                <div className="flex flex-wrap justify-between gap-2 text-sm mb-2 text-gray-700">
                   <div className="flex items-center gap-x-2 text-sm">
-                    <GrYoga className="text-sm" />
-                    <span>{sejour.sport}</span>
+                    <GrYoga className="text-lg" />
+                    <span className="text-xs">{sejour.sport}</span>
                   </div>
                   <div className="flex items-center gap-x-2 text-sm">
                     <FaCalendarDays className="text-sm" />
-                    <span>{sejour.duree}</span>
+                    <span className="text-xs">{sejour.duree}</span>
                   </div>
                   <div className="flex items-center gap-x-2 text-sm">
                     <SiLevelsdotfyi className="text-sm" />
-                    <span>{sejour.niveau}</span>
+                    <span className="text-xs">{sejour.niveau}</span>
                   </div>
                 </div>
-                <p className="text-gray-700 text-xs text-justify">
+                <p className="text-gray-700 mt-5 text-xs text-justify leading-5">
                   {sejour.resume}
                 </p>
               </div>
 
               {/* Miniatures principales */}
-              {sejour.imagesMain?.length > 0 && (
+              {/* {sejour.imagesMain?.length > 0 && (
                 <div className="px-6 pt-2 pb-4 flex gap-2">
                   {sejour.imagesMain?.slice(0, 2).map((img, i) => (
                     <img
                       key={i}
                       src={img.url}
                       alt={img.alt || sejour.titre}
-                      className="w-16 h-16 object-cover rounded-full border"
+                      className="w-16 h-16 object-cover rounded-full border shadow-2xl"
                     />
                   ))}
                 </div>
-              )}
+              )} */}
 
               {/* "Badges" Points forts */}
               {sejour.pointsForts && sejour.pointsForts.length > 0 && (
@@ -173,7 +165,7 @@ export default async function DestinationPage() {
                   {sejour.pointsForts.slice(0, 3).map((point, i) => (
                     <span
                       key={i}
-                      className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700"
+                      className="inline-block bg-white-200 rounded-full px-3 py-1 text-xs font-light text-orange-500 shadow-sm "
                     >
                       {point}
                     </span>

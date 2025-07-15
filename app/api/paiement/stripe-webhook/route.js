@@ -3,7 +3,7 @@ import { buffer } from "micro";
 import { connectDb } from "../../../../lib/db.mjs";
 import Sejour from "../../../../models/Sejour";
 import Reservation from "../../../../models/Reservation";
-import { sendConfirmationEmail } from "../../../../lib/sendEmail";
+import { sendConfirmationEmail } from "../../../../lib/sendEmails";
 
 export const config = { api: { bodyParser: false } };
 

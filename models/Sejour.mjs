@@ -48,6 +48,7 @@ const SejourSchema = new mongoose.Schema({
   sport: String,
   niveau: String,
   description: String,
+  capacity: Number, // Capacité d'accueil du séjour
 
   // SECTION HEBERGEMENT
   hebergementTitre: String,           // Titre section hébergement

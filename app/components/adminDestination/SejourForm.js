@@ -66,7 +66,7 @@ export default function SejourForm({
     "Yoga",
     "Plongée",
     "Randonnée",
-     "Parapente",
+    "Parapente",
     // ...autres sports initiaux
   ]);
   const [addingSport, setAddingSport] = useState(false);
@@ -150,6 +150,23 @@ export default function SejourForm({
           setForm((prev) => ({ ...prev, duree: e.target.value }))
         }
         placeholder="Durée"
+        className="w-full p-2 border rounded text-sm"
+      />
+
+      {/* Ajout : Champ Capacité */}
+      <label className="block text-xs mb-1">Capacité</label>
+      <input
+        name="capacity"
+        type="number"
+        min={1}
+        value={form.capacity ?? ""}
+        onChange={(e) =>
+          setForm((prev) => ({
+            ...prev,
+            capacity: e.target.value === "" ? "" : Number(e.target.value),
+          }))
+        }
+        placeholder="Capacité d'accueil (nombre de places)"
         className="w-full p-2 border rounded text-sm"
       />
       <div>

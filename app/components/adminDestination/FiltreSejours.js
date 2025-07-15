@@ -78,7 +78,7 @@ export function FiltreSejours({ sejours, onChange, className = "" }) {
 
   return (
     <form
-      className={`relative z-[99] w-full mx-auto mb-2 bg-white/80 p-2 md:p-4 shadow-md rounded-2xl text-xs ${className}`}
+      className={`relative z-[99] w-full mx-auto mb-2 bg-white p-3 md:p-4 shadow-md rounded-2xl text-xs ${className}`}
       autoComplete="off"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 items-end">

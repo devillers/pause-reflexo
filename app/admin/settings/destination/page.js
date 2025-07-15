@@ -1,5 +1,3 @@
-//app/admin/settings/destination/page.js
-
 "use client";
 export const dynamic = "force-dynamic";
 
@@ -21,6 +19,7 @@ const emptySejour = {
   description: "",
   dateDebut: "",
   dateFin: "",
+  capacity: 0, // Capacité d'accueil (nombre !)
   pointsForts: [],
   heroImage: { url: "", alt: "" },
   imagesMain: [],
@@ -155,40 +154,62 @@ export default function AdminSettingsDestination() {
 
   // CRUD actions
   const handleSave = async () => {
-  if (!form.heroImage?.url) {
-    alert("⚠️ Merci d’ajouter une image principale (hero) !");
-    return;
-  }
-  const method = isEditing ? "PUT" : "POST";
-  const url = isEditing ? `/api/destination/${form.slug}` : "/api/destination";
-  const formToSave = {
-    ...form,
-    dateDebut: form.dateDebut ? new Date(form.dateDebut) : null,
-    dateFin: form.dateFin ? new Date(form.dateFin) : null,
-  };
-  const res = await fetch(url, {
-    method,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formToSave),
-  });
+    if (!form.heroImage?.url) {
+      alert("⚠️ Merci d’ajouter une image principale (hero) !");
+      return;
+    }
+    if (!form.titre?.trim()) {
+      alert("⚠️ Merci de renseigner un titre de séjour !");
+      return;
+    }
+    if (!form.capacity || isNaN(form.capacity) || form.capacity < 1) {
+      alert("⚠️ Merci de renseigner une capacité d'accueil valide !");
+      return;
+    }
+    if (!form.dateDebut || !form.dateFin) {
+      alert("⚠️ Merci de renseigner les dates de début et fin !");
+      return;
+    }
 
-  if (res.ok) {
-    alert("✅ Séjour sauvegardé");
-    setForm(emptySejour);
-    setIsEditing(false);
-    setSelected(null);
-    await loadSejours();
-  } else {
-    alert("Erreur lors de la sauvegarde");
-  }
-};
+    // Conversion capacité en number (sécurité)
+    const formToSave = {
+      ...form,
+      capacity: Number(form.capacity),
+      dateDebut: form.dateDebut ? new Date(form.dateDebut).toISOString() : null,
+      dateFin: form.dateFin ? new Date(form.dateFin).toISOString() : null,
+    };
+
+    const method = isEditing ? "PUT" : "POST";
+    const url = isEditing ? `/api/destination/${form.slug}` : "/api/destination";
+
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formToSave),
+    });
+
+    if (res.ok) {
+      alert("✅ Séjour sauvegardé");
+      setForm(emptySejour);
+      setIsEditing(false);
+      setSelected(null);
+      await loadSejours();
+    } else {
+      alert("Erreur lors de la sauvegarde");
+    }
+  };
 
   const editSejour = (sejour) => {
     setForm({
       ...emptySejour,
       ...sejour,
-      dateDebut: sejour.dateDebut ? sejour.dateDebut.slice(0, 10) : "",
-      dateFin: sejour.dateFin ? sejour.dateFin.slice(0, 10) : "",
+      dateDebut: sejour.dateDebut
+        ? sejour.dateDebut.slice(0, 10)
+        : "",
+      dateFin: sejour.dateFin
+        ? sejour.dateFin.slice(0, 10)
+        : "",
+      capacity: sejour.capacity ?? 0,
     });
     setSelected(sejour.slug);
     setIsEditing(true);
@@ -205,7 +226,8 @@ export default function AdminSettingsDestination() {
     }
   };
 
-  if (loading) return <p className="p-6 text-gray-500">Chargement…</p>;
+  if (loading)
+    return <p className="p-6 text-gray-500">Chargement…</p>;
 
   return (
     <div className="p-8 space-y-10 bg-gray-50 min-h-screen">

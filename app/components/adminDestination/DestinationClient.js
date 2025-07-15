@@ -7,28 +7,36 @@ import { FiltreSejours } from "./FiltreSejours";
 import { SiLevelsdotfyi } from "react-icons/si";
 import { FaCalendarDays } from "react-icons/fa6";
 import { IoTodayOutline } from "react-icons/io5";
+import { IoPersonOutline } from "react-icons/io5";
 
 export default function DestinationClient({ sejours }) {
   const [filters, setFilters] = useState({});
 
   // Filtrage dynamique
-  const filtered = useMemo(() => {
-    return sejours.filter((s) => {
-      if (filters.sport && s.sport !== filters.sport) return false;
-      if (filters.destination && s.destination !== filters.destination)
-        return false;
-      if (filters.niveau && s.niveau !== filters.niveau) return false;
-      if (filters.dateDebut && s.dateDebut && s.dateDebut < filters.dateDebut)
-        return false;
-      return true;
-    });
-  }, [sejours, filters]);
+ const filtered = useMemo(() => {
+  return sejours.filter((s) => {
+    if (filters.sport && s.sport !== filters.sport) return false;
+    if (filters.destination && s.destination !== filters.destination) return false;
+    if (filters.niveau && s.niveau !== filters.niveau) return false;
+    if (
+      filters.dateDebut &&
+      s.dateDebut &&
+      new Date(s.dateDebut) < new Date(filters.dateDebut)
+    )
+      return false;
+    return true;
+  });
+}, [sejours, filters]);
 
   return (
     <main className="max-w-7xl mx-auto px-4">
-      <FiltreSejours sejours={sejours} onChange={setFilters} className="z-50" />
+      <FiltreSejours
+        sejours={sejours}
+        onChange={setFilters}
+        className="z-10 mt-[-40px]"
+      />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-[60px] max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-[60px] max-w-5xl mx-auto">
         {filtered.length === 0 && (
           <div className="col-span-full text-center text-gray-400 py-8">
             Aucun séjour ne correspond à vos critères.
@@ -120,6 +128,10 @@ export default function DestinationClient({ sejours }) {
                 <div className="flex items-center gap-x-2 text-sm">
                   <SiLevelsdotfyi className="text-sm" />
                   <span className="text-xs">{sejour.niveau}</span>
+                </div>
+                <div className="flex items-center gap-x-2 text-sm">
+                  <IoPersonOutline className="text-sm" />
+                  <span className="text-xs">{sejour.capacity}</span>
                 </div>
               </div>
               <p className="text-gray-700 mt-5 text-[11px] text-justify leading-5">

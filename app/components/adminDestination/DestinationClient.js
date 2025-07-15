@@ -13,20 +13,21 @@ export default function DestinationClient({ sejours }) {
   const [filters, setFilters] = useState({});
 
   // Filtrage dynamique
- const filtered = useMemo(() => {
-  return sejours.filter((s) => {
-    if (filters.sport && s.sport !== filters.sport) return false;
-    if (filters.destination && s.destination !== filters.destination) return false;
-    if (filters.niveau && s.niveau !== filters.niveau) return false;
-    if (
-      filters.dateDebut &&
-      s.dateDebut &&
-      new Date(s.dateDebut) < new Date(filters.dateDebut)
-    )
-      return false;
-    return true;
-  });
-}, [sejours, filters]);
+  const filtered = useMemo(() => {
+    return sejours.filter((s) => {
+      if (filters.sport && s.sport !== filters.sport) return false;
+      if (filters.destination && s.destination !== filters.destination)
+        return false;
+      if (filters.niveau && s.niveau !== filters.niveau) return false;
+      if (
+        filters.dateDebut &&
+        s.dateDebut &&
+        new Date(s.dateDebut) < new Date(filters.dateDebut)
+      )
+        return false;
+      return true;
+    });
+  }, [sejours, filters]);
 
   return (
     <main className="max-w-7xl mx-auto px-4">

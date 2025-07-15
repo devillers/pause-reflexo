@@ -97,8 +97,8 @@ export default async function SejourDetailPage(props) {
           )}
 
           <Link
-            href={`/contact?sejour=${sejour.slug}`}
-            className="hidden sm:block border-pink-500 border-[1px] text-pink-500 hover:bg-pink-700  hover:text-white font-bold uppercase px-3 py-1 rounded-xl transition shadow-sm  xl:w-auto  xl:mt-0 text-lg"
+            href={`/reservation/options?slug=${sejour.slug}`}
+            className="border-pink-500 border-[1px] text-pink-500 hover:bg-pink-700 hover:text-white font-bold uppercase px-3 py-1 rounded-xl transition shadow-sm w-full xl:w-auto mt-8 xl:mt-0 text-lg"
           >
             Réserver
           </Link>
@@ -111,11 +111,7 @@ export default async function SejourDetailPage(props) {
           </span>
 
           <div className="flex items-center gap-x-2 text-xs text-pink-500">
-            <SportIcon
-              sport={sejour.sport}
-              size={18}
-              
-            />
+            <SportIcon sport={sejour.sport} size={18} />
             <span>{sejour.sport}</span>
           </div>
           <div className="flex items-center gap-x-2 text-sm text-pink-500">
@@ -496,8 +492,8 @@ export default async function SejourDetailPage(props) {
         )}
 
         <Link
-          href={`/contact?sejour=${sejour.slug}`}
-          className=" border-pink-500 border-[1px] text-pink-500 hover:bg-pink-700  hover:text-white font-bold uppercase px-3 py-1 rounded-xl transition shadow-sm w-full xl:w-auto mt-8 xl:mt-0 text-lg"
+          href={`/reservation/options?slug=${sejour.slug}`}
+          className="border-pink-500 border-[1px] text-pink-500 hover:bg-pink-700 hover:text-white font-bold uppercase px-3 py-1 rounded-xl transition shadow-sm w-full xl:w-auto mt-8 xl:mt-0 text-lg"
         >
           Réserver
         </Link>

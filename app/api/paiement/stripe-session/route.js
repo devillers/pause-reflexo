@@ -2,16 +2,15 @@ import Stripe from "stripe";
 import { connectDb } from "../../../../lib/db.mjs";
 import Sejour from "../../../../models/Sejour";
 
+console.log("clé stripe :", process.env.STRIPE_SECRET_KEY);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
-
+export async function POST(req) {
   await connectDb();
-  const { slug, nbPlaces, email, nom, prenom } = req.body;
+  const { slug, nbPlaces, email, nom, prenom } = await req.json();
   const sejour = await Sejour.findOne({ slug });
   if (!sejour || sejour.capacity < nbPlaces) {
-    return res.status(400).json({ error: "Plus assez de places" });
+    return Response.json({ error: "Plus assez de places" }, { status: 400 });
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -37,5 +36,5 @@ export default async function handler(req, res) {
     },
   });
 
-  res.status(200).json({ url: session.url });
+  return Response.json({ url: session.url });
 }

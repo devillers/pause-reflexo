@@ -90,7 +90,7 @@ export default function MegaMenu() {
         <div className="flex items-center gap-2">
           <a href="/">
             <h1 className="text-[40px] italic font-extrabold uppercase text-white">
-              Sana<span className="text-orange-500 ">luna</span>
+              Sana<span className="text-pink-500 ">luna</span>
             </h1>
           </a>
         </div>
@@ -125,14 +125,14 @@ export default function MegaMenu() {
                       navigate(item.href);
                     }}
                     className={`
-                      flex items-center gap-2 text-[20px] uppercase font-extrabold leading-4 hover:text-orange-500
+                      flex items-center gap-2 text-[20px] uppercase font-extrabold leading-4 hover:text-pink-500
                       ${
                         pathname === item.href ? "text-white" : "text-[#293d4c]"
                       }
                     `}
                   >
                     {item.icon && (
-                      <item.icon className="w-4 h-4 text-orange-500" />
+                      <item.icon className="w-4 h-4 text-pink-500" />
                     )}
                     <span>{item.title}</span>
                   </a>
@@ -275,7 +275,7 @@ export default function MegaMenu() {
                           );
                         }
                       }}
-                      className="flex items-center gap-2 font-bold uppercase text-3xl mb-3 cursor-pointer text-white hover:text-orange-500 hover:italic hover:bg-white/80 rounded p-2 text-left w-full"
+                      className="flex items-center gap-2 font-bold uppercase text-3xl mb-3 cursor-pointer text-white hover:text-pink-500 hover:italic hover:bg-white/80 rounded p-2 text-left w-full"
                     >
                       {item.icon && (
                         <item.icon className="w-4 h-4 text-white" />

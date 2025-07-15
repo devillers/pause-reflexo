@@ -38,7 +38,7 @@ export default function HeroHeader({
           </h1>
           {/* Affichage de la description */}
           {description && (
-            <p className="mt-6 text-2xl font-medium text-white max-w-2xl drop-shadow">
+            <p className="mt-6 text-2xl font-thin italic text-white max-w-2xl drop-shadow">
               {description}
             </p>
           )}

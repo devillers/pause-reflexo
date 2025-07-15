@@ -1,6 +1,7 @@
 //APP/components/adminDestination/SejourForm.js
 
 "use client";
+import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import ProgrammeSection from "./ProgrammeSection";
@@ -31,8 +32,15 @@ export default function SejourForm({
       onDrop: onDropHero,
     });
 
+  function handleChange(e) {
+    const { name, value, type } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "number" ? (value === "" ? null : Number(value)) : value,
+    }));
+  }
 
-     const uploadImage = async (file) => {
+  const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     const res = await fetch("/api/uploadCloudinary", {
@@ -52,6 +60,16 @@ export default function SejourForm({
       accept: { "image/*": [] },
       onDrop: onDropMain,
     });
+
+  // ajouter un sport
+  const [sports, setSports] = useState([
+    "Yoga",
+    "Plongée",
+    "Randonnée",
+    // ...autres sports initiaux
+  ]);
+  const [addingSport, setAddingSport] = useState(false);
+  const [nouveauSport, setNouveauSport] = useState("");
 
   // Galerie Dropzone
   const {
@@ -133,15 +151,68 @@ export default function SejourForm({
         placeholder="Durée"
         className="w-full p-2 border rounded text-sm"
       />
-      <input
-        name="sport"
-        value={form.sport}
-        onChange={(e) =>
-          setForm((prev) => ({ ...prev, sport: e.target.value }))
-        }
-        placeholder="Sport"
-        className="w-full p-2 border rounded text-sm"
-      />
+      <div>
+        <label className="block text-xs mb-1">Sport</label>
+        {addingSport ? (
+          <div className="flex gap-2">
+            <input
+              value={nouveauSport}
+              onChange={(e) => setNouveauSport(e.target.value)}
+              placeholder="Nouveau sport"
+              className="w-full p-2 border rounded text-sm"
+            />
+            <button
+              type="button"
+              className="bg-[#009992] text-white rounded px-2"
+              onClick={() => {
+                if (nouveauSport && !sports.includes(nouveauSport)) {
+                  setSports([...sports, nouveauSport]);
+                  setForm((prev) => ({ ...prev, sport: nouveauSport }));
+                }
+                setNouveauSport("");
+                setAddingSport(false);
+              }}
+            >
+              OK
+            </button>
+            <button
+              type="button"
+              className="text-gray-400 px-2"
+              onClick={() => {
+                setAddingSport(false);
+                setNouveauSport("");
+              }}
+              title="Annuler"
+            >
+              ×
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <select
+              name="sport"
+              value={form.sport || ""}
+              onChange={(e) => {
+                if (e.target.value === "__ajouter__") {
+                  setAddingSport(true);
+                } else {
+                  setForm((prev) => ({ ...prev, sport: e.target.value }));
+                }
+              }}
+              className="w-full p-2 border rounded text-sm"
+            >
+              <option value="">Choisir un sport</option>
+              {sports.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+              <option value="__ajouter__">+ Ajouter un sport</option>
+            </select>
+          </div>
+        )}
+      </div>
+
       <input
         name="niveau"
         value={form.niveau}
@@ -350,6 +421,70 @@ export default function SejourForm({
           setForm((prev) => ({ ...prev, prixDetail }))
         }
       />
+
+      {/* SECTION SPORT/NIVEAU/EXPERT */}
+      <div className="mb-6">
+        <label className="block text-lg font-bold mb-2">
+          Infos sport & niveau
+        </label>
+
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">
+            Description sportive (sportDescriptif)
+          </label>
+          <textarea
+            name="sportDescriptif"
+            value={form.sportDescriptif || ""}
+            onChange={handleChange}
+            className="input"
+            rows={2}
+            placeholder="Ex : Présentation du sport, intensité, etc."
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">
+            Encadrement sportif (encadrementSportif)
+          </label>
+          <input
+            type="text"
+            name="encadrementSportif"
+            value={form.encadrementSportif || ""}
+            onChange={handleChange}
+            className="input"
+            placeholder="Ex : 'Encadrement par moniteur diplômé…'"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">
+            Explication niveau (niveauExplication)
+          </label>
+          <textarea
+            name="niveauExplication"
+            value={form.niveauExplication || ""}
+            onChange={handleChange}
+            className="input"
+            rows={2}
+            placeholder="Ex : Explications sur les niveaux (débutant, intermédiaire, etc.)"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-1">
+            Âge minimum conseillé (ageMini)
+          </label>
+          <input
+            type="number"
+            name="ageMini"
+            min={0}
+            value={form.ageMini ?? ""}
+            onChange={handleChange}
+            className="input"
+            placeholder="Ex : 12"
+          />
+        </div>
+      </div>
 
       {/* HEBERGEMENT Section */}
       <HebergementForm

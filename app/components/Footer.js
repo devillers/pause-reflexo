@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-bold uppercase text-[12px]">Vel<span className="text-orange-500 text-[12px]">aya</span></h3>
+            <h3 className="font-bold uppercase text-[12px]">Vel<span className="text-pink-500 text-[12px]">aya</span></h3>
             
           </div>
           <p className="text-[10px] text-gray-600 mt-2 text-justify pr-6 leading-6">

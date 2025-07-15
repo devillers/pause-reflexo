@@ -28,7 +28,7 @@ export default function DestinationClient({ sejours }) {
     <main className="max-w-7xl mx-auto px-4">
       <FiltreSejours sejours={sejours} onChange={setFilters} className="z-50" />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-8 mt-[60px] max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-[60px] max-w-5xl mx-auto">
         {filtered.length === 0 && (
           <div className="col-span-full text-center text-gray-400 py-8">
             Aucun séjour ne correspond à vos critères.
@@ -95,7 +95,7 @@ export default function DestinationClient({ sejours }) {
                 </div>
               )}
 
-              <div className=" flex-col   my-5">
+              <div className=" flex-col my-5">
                 <div className="font-extrabold text-xl uppercase italic text-gray-800/60 ">
                   {sejour.titre}
                 </div>

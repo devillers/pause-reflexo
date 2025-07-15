@@ -66,6 +66,7 @@ export default function SejourForm({
     "Yoga",
     "Plongée",
     "Randonnée",
+     "Parapente",
     // ...autres sports initiaux
   ]);
   const [addingSport, setAddingSport] = useState(false);

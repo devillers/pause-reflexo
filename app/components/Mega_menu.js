@@ -89,7 +89,7 @@ export default function MegaMenu() {
       <div className=" mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <a href="/">
-            <h1 className="text-[40px] italic font-extrabold uppercase text-white">
+            <h1 className="text-[25px] md:text-[40px] italic font-extrabold uppercase text-white">
               Sana<span className="text-pink-500 ">luna</span>
             </h1>
           </a>

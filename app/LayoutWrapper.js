@@ -16,8 +16,6 @@ export default function LayoutWrapper({ children }) {
 
   const isAdmin = pathname?.startsWith('/admin');
   const isSignin = pathname === '/auth/signin';
-  const isContact = pathname === '/contact';
-  const isSoins = pathname?.startsWith('/soins');
 
   return (
     <>

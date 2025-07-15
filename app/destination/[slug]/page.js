@@ -48,10 +48,10 @@ export default async function SejourDetailPage(props) {
           {/* Bloc texte centré verticalement, aligné à gauche */}
           <div className="absolute inset-0 flex items-center pl-8 z-20">
             <div className="p-10">
-              <h1 className="mt-16 md:mt-0 text-5xl md:text-7xl uppercase italic font-extrabold mb-2 text-white/55">
+              <h1 className="mt-16 md:mt-0 text-3xl md:text-7xl uppercase italic font-extrabold  text-white/55">
                 {sejour.titre}
               </h1>
-              <div className="text-gray-200 mb-1 text-4xl md:text-5xl font-thin ">
+              <div className="text-pink-500 mb-1 text-xl italic md:text-5xl font-bold uppercase">
                 {sejour.destination}
               </div>
             </div>
@@ -65,52 +65,62 @@ export default async function SejourDetailPage(props) {
       )}
       <main className="max-w-4xl mx-auto px-4 ">
         {/* Dates séjour */}
-        {(sejour.dateDebut || sejour.dateFin) && (
-          <div className="flex justify-center md:justify-start items-center gap-2 py-8">
-            <span className="inline-flex items-center gap-x-2 px-3 py-1 rounded-full bg-white text-gray-900 text-xs font-light shadow-sm">
-              <IoTodayOutline className="text-base mr-1" />
-              {sejour.dateDebut && (
-                <span className="font-light">
-                  {new Date(sejour.dateDebut).toLocaleDateString("fr-FR", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </span>
-              )}
-              {sejour.dateDebut && sejour.dateFin && (
-                <span className="mx-1 font-light text-[#bdbdbd]">—</span>
-              )}
-              {sejour.dateFin && (
-                <span className="font-light">
-                  {new Date(sejour.dateFin).toLocaleDateString("fr-FR", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </span>
-              )}
-            </span>
-          </div>
-        )}
+
+        <div className="flex justify-between  items-center gap-2 py-8">
+          {(sejour.dateDebut || sejour.dateFin) && (
+            <div className="flex justify-center md:justify-start items-center gap-2 py-8">
+              <span className="inline-flex items-center gap-x-2 px-3 py-1 rounded-full bg-white text-pink-500 text-xs font-light shadow-sm">
+                <IoTodayOutline className="text-base mr-1" />
+                {sejour.dateDebut && (
+                  <span className="font-light">
+                    {new Date(sejour.dateDebut).toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                )}
+                {sejour.dateDebut && sejour.dateFin && (
+                  <span className="mx-1 font-light text-[#bdbdbd]">—</span>
+                )}
+                {sejour.dateFin && (
+                  <span className="font-light">
+                    {new Date(sejour.dateFin).toLocaleDateString("fr-FR", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </span>
+                )}
+              </span>
+            </div>
+          )}
+
+          <Link
+            href={`/contact?sejour=${sejour.slug}`}
+            className="hidden sm:block border-pink-500 border-[1px] text-pink-500 hover:bg-pink-700  hover:text-white font-bold uppercase px-3 py-1 rounded-xl transition shadow-sm  xl:w-auto  xl:mt-0 text-lg"
+          >
+            Réserver
+          </Link>
+        </div>
 
         <div className="flex flex-wrap gap-4 mb-6">
-          <span className="inline-flex items-center gap-x-2 text-xs  uppercase">
-            <IoTodayOutline className="text-base" />
+          <span className="inline-flex items-center gap-x-2 text-xs text-pink-500 uppercase">
+            <IoTodayOutline className="text-base text-pink-500 " />
             {sejour.duree} jours
           </span>
 
-          <div className="flex items-center gap-x-2 text-xs">
+          <div className="flex items-center gap-x-2 text-xs text-pink-500">
             <SportIcon
               sport={sejour.sport}
               size={18}
-              className="text-[#364054]"
+              
             />
             <span>{sejour.sport}</span>
           </div>
-          <div className="flex items-center gap-x-2 text-sm">
-            <SiLevelsdotfyi className="text-sm" />
-            <span className="text-xs">{sejour.niveau}</span>
+          <div className="flex items-center gap-x-2 text-sm text-pink-500">
+            <SiLevelsdotfyi className="text-sm text-pink-500" />
+            <span className="text-xs ">{sejour.niveau}</span>
           </div>
         </div>
         <div className="prose mb-6 text-xs leading-6 text-justify text-gray-900">
@@ -154,9 +164,9 @@ export default async function SejourDetailPage(props) {
               {sejour.encadrementSportif && (
                 <div className="mb-1 flex items-center gap-x-2 justify-start">
                   <span className="text-xl italic uppercase font-extrabold text-gray-700/90">
-                    <FaPeopleArrows size={16} className="text-pink-500"/>
+                    <FaPeopleArrows size={16} className="text-pink-500" />
                   </span>
-                    <span className="text-sm italic uppercase font-light text-gray-700/90 leading-loose">
+                  <span className="text-sm italic uppercase font-light text-gray-700/90 leading-loose">
                     {sejour.encadrementSportif}
                   </span>
                 </div>
@@ -164,9 +174,9 @@ export default async function SejourDetailPage(props) {
               {sejour.niveauExplication && (
                 <div className="mb-1 flex items-center gap-x-2 justify-start">
                   <span className="text-xl italic uppercase font-extrabold text-gray-700/90">
-                    <SiLevelsdotfyi size={16} className="text-pink-500"/>
+                    <SiLevelsdotfyi size={16} className="text-pink-500" />
                   </span>
-                    <span className="text-sm italic uppercase font-light text-gray-700/90 leading-loose">
+                  <span className="text-sm italic uppercase font-light text-gray-700/90 leading-loose">
                     {sejour.niveauExplication}
                   </span>
                 </div>
@@ -174,7 +184,7 @@ export default async function SejourDetailPage(props) {
               {typeof sejour.ageMini === "number" && (
                 <div className="mb-1 flex items-center gap-x-2 justify-start">
                   <span className="text-xl italic uppercase font-extrabold text-gray-700/90">
-                    <FaBirthdayCake size={16} className="text-pink-500"/>
+                    <FaBirthdayCake size={16} className="text-pink-500" />
                   </span>
                   <span className="text-sm italic uppercase font-light text-gray-700/90 leading-loose">
                     à partir de {sejour.ageMini} ans
@@ -239,13 +249,32 @@ export default async function SejourDetailPage(props) {
                     )}
                   </div>
                   {/* Points forts du jour */}
+
                   {sejour.programme[0].pointsForts?.length > 0 && (
+                    <div>
+                      <h2 className="text-xl italic uppercase font-extrabold mt-6 text-gray-700/90 mb-4">
+                        Les points forts
+                      </h2>
+                      <div className="flex flex-wrap gap-2 mb-1 text-xs">
+                        {sejour.programme[0].pointsForts.map((pt, j) => (
+                          <a
+                            className="bg-pink-500 text-white px-2 py-1 text-center text-[9px] leading-loose rounded-full"
+                            key={j}
+                          >
+                            {pt}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* {sejour.programme[0].pointsForts?.length > 0 && (
                     <ul className="list-disc pl-5 mb-1 text-xs">
                       {sejour.programme[0].pointsForts.map((pt, j) => (
                         <li key={j}>{pt}</li>
                       ))}
                     </ul>
-                  )}
+                  )} */}
                   {/* Images du jour */}
                   {sejour.programme[0].images?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
@@ -427,7 +456,7 @@ export default async function SejourDetailPage(props) {
                 <div className="text-xl italic uppercase font-extrabold mt-4 text-gray-700/90 mb-2">
                   Options{" "}
                 </div>
-                 <ul className="pl-5 mb-3 text-sm uppercase italic">
+                <ul className="pl-5 mb-3 text-sm uppercase italic">
                   {sejour.prixDetail.options.map((el, i) => (
                     <li key={i}>{el}</li>
                   ))}
@@ -449,7 +478,7 @@ export default async function SejourDetailPage(props) {
 
         {/* GALLERIE */}
         {sejour.imagesGallery?.length > 0 && (
-          <div className="bg-white shadow-md rounded-md p-6 mt-6 ">
+          <div className="bg-white shadow-md rounded-md p-6 my-6 ">
             <h2 className="text-3xl italic uppercase font-extrabold mb-4 text-gray-700/90">
               Galerie
             </h2>
@@ -468,9 +497,9 @@ export default async function SejourDetailPage(props) {
 
         <Link
           href={`/contact?sejour=${sejour.slug}`}
-          className="bg-[#3855C1] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#2741a0] mt-8 inline-block"
+          className=" border-pink-500 border-[1px] text-pink-500 hover:bg-pink-700  hover:text-white font-bold uppercase px-3 py-1 rounded-xl transition shadow-sm w-full xl:w-auto mt-8 xl:mt-0 text-lg"
         >
-          Réserver ce séjour
+          Réserver
         </Link>
       </main>
     </>

@@ -4,9 +4,10 @@ import { connectDb } from "../../../../lib/db.mjs";
 import Sejour from "../../../../models/Sejour";
 
 // --- GET ---
-export async function GET(request, { params }) {
+export async function GET(request, ctx) {
+  const { slug } = await Promise.resolve(ctx.params);
   await connectDb();
-  const sejour = await Sejour.findOne({ slug: params.slug }).lean();
+  const sejour = await Sejour.findOne({ slug }).lean();
   if (!sejour)
     return Response.json({ error: "Séjour non trouvé" }, { status: 404 });
   return Response.json(sejour);

@@ -9,7 +9,7 @@ export default function ReservationOptions() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/sejours")
+    fetch("/api/paiement/sejours")
       .then(r => r.json())
       .then(setSejours);
   }, []);

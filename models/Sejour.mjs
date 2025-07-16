@@ -1,7 +1,5 @@
 //models/Sejour.mjs
 
-// models/Sejour.mjs
-
 import mongoose from "mongoose";
 
 const imageSchema = new mongoose.Schema(

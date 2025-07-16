@@ -2,7 +2,6 @@ import Stripe from "stripe";
 import { connectDb } from "../../../../lib/db.mjs";
 import Sejour from "../../../../models/Sejour";
 
-console.log("clé stripe :", process.env.STRIPE_SECRET_KEY);
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2023-10-16" });
 
 export async function POST(req) {
@@ -14,7 +13,6 @@ export async function POST(req) {
   }
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
     customer_email: email,
     line_items: [{
       price_data: {
@@ -25,16 +23,15 @@ export async function POST(req) {
       quantity: nbPlaces,
     }],
     mode: "payment",
-    success_url: `${process.env.NEXT_PUBLIC_URL}/reservation/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_URL}/reservation/options?cancel=1`,
-    metadata: {
-      slug,
-      nbPlaces,
-      nom,
-      prenom,
-      email,
-    },
+    success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/reservation/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/reservation/options?cancel=1`,
+    metadata: { slug, nbPlaces, nom, prenom, email },
   });
 
   return Response.json({ url: session.url });
 }
+
+// Optionnel pour éviter 405 sur GET
+// export async function GET() {
+//   return Response.json({ error: "Méthode non autorisée" }, { status: 405 });
+// }

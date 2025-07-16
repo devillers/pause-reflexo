@@ -1,5 +1,7 @@
-import { connectDb } from "../../../../lib/db.mjs";
-import Sejour from "../../../../models/Sejour";
+// app/api/paiement/sejours/route.js
+
+import { connectDb } from "@/lib/db.mjs";
+import Sejour from "@/models/Sejour";
 
 // Gestion d’erreur centralisée et headers explicites
 export async function GET() {

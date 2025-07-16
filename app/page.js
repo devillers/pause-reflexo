@@ -5,8 +5,9 @@ import FullScreenPage from "./components/FullScreenPage";
 export default function Page() {
   return (
     <>
-      <FullScreenPage />;
-      
+     
+        <FullScreenPage />;
+     
     </>
   );
 }

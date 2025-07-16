@@ -1,5 +1,8 @@
-import { connectDb } from "../../../../lib/db.mjs";
-import Reservation from "../../../../models/Reservation";
+// app/api/paiement/reservation/route.js
+
+
+import { connectDb } from "@/lib/db.mjs";
+import Reservation from "@/models/Reservation";
 
 export async function GET(req) {
   await connectDb();

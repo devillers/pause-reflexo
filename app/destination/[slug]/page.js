@@ -63,7 +63,7 @@ export default async function SejourDetailPage(props) {
           </span>
         </div>
       )}
-      <main className="max-w-4xl mx-auto px-4 ">
+      <section className="max-w-4xl mx-auto px-4 ">
         {/* Dates séjour */}
 
         <div className="flex justify-between  items-center gap-2 py-8">
@@ -497,7 +497,7 @@ export default async function SejourDetailPage(props) {
         >
           Réserver
         </Link>
-      </main>
+      </section>
     </>
   );
 }

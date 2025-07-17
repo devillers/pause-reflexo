@@ -2,9 +2,10 @@
 
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { RiHome2Line } from "react-icons/ri";
 import { HiOutlineDownload } from "react-icons/hi";
-
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 

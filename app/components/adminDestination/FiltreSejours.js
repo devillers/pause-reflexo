@@ -78,14 +78,14 @@ export function FiltreSejours({ sejours, onChange, className = "" }) {
 
   return (
     <form
-      className={`relative z-[99] w-full mx-auto mb-2 bg-white p-3 md:p-4 shadow-md rounded-2xl text-xs ${className}`}
+      className={`relative z-[40] w-full mx-auto mb-2 bg-white p-3 md:p-4 shadow-md rounded-2xl text-xs ${className}`}
       autoComplete="off"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 items-end">
+      <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-5 gap-2 items-end">
         {/* Date de début */}
-        <div className="relative z-0 w-full group">
+        <div className="hidden md:block relative z-0 w-full group">
           <label className="block mb-0.5 text-xs font-bold text-[#364054]">Date de début</label>
-          <div className="relative flex items-center">
+          <div className="flex  relative z-[40]   items-center">
             <DatePicker
               locale={fr}
               selected={selectedDate}
@@ -93,7 +93,7 @@ export function FiltreSejours({ sejours, onChange, className = "" }) {
               dateFormat="dd/MM/yyyy"
               placeholderText="date de début"
               className="block py-1 px-0 w-full text-xs text-gray-900 bg-transparent border-0 border-b border-[#a7afbe] focus:outline-none focus:ring-0 focus:border-pink-400 rounded-none pr-8"
-              calendarClassName="rounded-xl shadow-lg border z-[99] text-xs"
+              calendarClassName="rounded-xl shadow-lg border  text-xs"
               popperClassName="z-[99]"
               wrapperClassName="w-full"
               todayButton="Aujourd'hui"

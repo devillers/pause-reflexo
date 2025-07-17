@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <LayoutProvider>
             <LayoutWrapper>
-              <main className="flex-2">{children}</main>
+              <main className="">{children}</main>
             </LayoutWrapper>
           </LayoutProvider>
         </Providers>

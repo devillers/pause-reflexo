@@ -1,5 +1,10 @@
+
+// app/destination/page.js
+
 import HeroHeader from "../components/HeroHeader";
 import DestinationClient from "../components/adminDestination/DestinationClient";
+import StickyHeader from "../components/StickyHeader"; // ✅ ajoute ceci
+
 
 // Helper pour URL API compatible server/client
 function getBaseUrl() {

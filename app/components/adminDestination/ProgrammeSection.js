@@ -1,5 +1,5 @@
 "use client";
-import ProgrammeDayForm from "./PorgrammeDayForm";
+import ProgrammeDayForm from "./ProgrammeDayForm";
 
 export default function ProgrammeSection({ form, setForm }) {
   // Ajouter un jour
